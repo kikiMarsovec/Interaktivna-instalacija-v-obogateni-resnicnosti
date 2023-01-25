@@ -63,9 +63,10 @@ GameObject:
   - component: {fileID: 6572088740420283334}
   - component: {fileID: 4065257559975552206}
   - component: {fileID: 3487194931296279233}
+  - component: {fileID: 2626966120546397499}
   m_Layer: 0
   m_Name: Atom_LOD1
-  m_TagString: Untagged
+  m_TagString: Atom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,8 +143,21 @@ MeshCollider:
   m_GameObject: {fileID: 5511121646146936302}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &2626966120546397499
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5511121646146936302}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.48
+  m_Center: {x: 0, y: 0, z: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3109878327334745504}
   m_Layer: 0
   m_Name: HolmiumAtomImpostor_Prefab
-  m_TagString: Untagged
+  m_TagString: Atom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,9 +63,10 @@ GameObject:
   - component: {fileID: 3426987292110598533}
   - component: {fileID: 756983590442040607}
   - component: {fileID: 5626937294023093881}
+  - component: {fileID: 5410928409781833514}
   m_Layer: 0
   m_Name: Atom_LOD1
-  m_TagString: Untagged
+  m_TagString: Atom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,8 +143,21 @@ MeshCollider:
   m_GameObject: {fileID: 7540059366000332208}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &5410928409781833514
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540059366000332208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.48
+  m_Center: {x: 0, y: 0, z: 0}
