@@ -52,6 +52,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	void AtomDrzanje(GameObject atom) {
 		// TODO
 		Debug.Log("Drzanje: " + atom.name); // DELETE
+		atom.GetComponent<Renderer>().material.color = Color.yellow; // DELETE
 	}
 
 
