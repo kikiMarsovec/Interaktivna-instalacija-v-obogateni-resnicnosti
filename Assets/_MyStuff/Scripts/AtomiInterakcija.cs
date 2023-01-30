@@ -20,8 +20,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			trenutnoInteraktiramo = true;
 			casInterakcije = Time.time;
 		}
-		else { // TODO DELETE
-			Debug.Log(trenutniGameObject.name);
+		else if (string.Equals(trenutniGameObject.tag, "Nanocev")) {
+			// Ce smo zaceli translirati, skalirati ali rotirati celotno Nanocev, izklopimo dolocene atome, da izboljsamo delovanje aplikacije
+			gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
 		}
 	}
 
@@ -40,6 +41,10 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 				// Atom smo drzali
 				AtomDrzanje(trenutniGameObject);
 			}
+		}
+		else if (string.Equals(trenutniGameObject.tag, "Nanocev")) {
+			// Prenehali smo skalirati, translirati ali rotirati nanocev, zato spet vklopimo vse atome
+			gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
 		}
 	}
 
