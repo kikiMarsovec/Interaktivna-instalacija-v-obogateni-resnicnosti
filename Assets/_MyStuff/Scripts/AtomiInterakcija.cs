@@ -8,6 +8,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	// spremenljivka, ki nam pove, ali trenutno interaktiramo z atomom
 	// (preprecimo, da bi istocasno iteraktirali z vec atomi hkrati, poleg tega pa jo potrebujemo za prozenje UI timerja - Zato je javna)
 	public bool trenutnoInteraktiramo = false;
+	// spremenljivka, ki nam pove s koliko rokami trenutno drzimo celotno nanocevko
+	// (ko drzimo nanocevko z vsaj eno roko, izklopimo dolocene atome, za izboljsanje delovanja)
+	private int stevecRok = 0;
 	// spremenljivka, ki belezi koliko casa interaktiramo z atomom
 	// (z njo razlikujemo med klikom in drzanjem atoma)
 	private float casInterakcije;
@@ -21,8 +24,10 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			casInterakcije = Time.time;
 		}
 		else if (string.Equals(trenutniGameObject.tag, "Nanocev")) {
+			stevecRok++;
 			// Ce smo zaceli translirati, skalirati ali rotirati celotno Nanocev, izklopimo dolocene atome, da izboljsamo delovanje aplikacije
 			gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
+			gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(false);
 		}
 	}
 
@@ -43,8 +48,13 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			}
 		}
 		else if (string.Equals(trenutniGameObject.tag, "Nanocev")) {
-			// Prenehali smo skalirati, translirati ali rotirati nanocev, zato spet vklopimo vse atome
-			gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
+			stevecRok--;
+			// Prenehali smo skalirati, translirati ali rotirati nanocev, zato spet vklopimo vse atome (ce smo izpustili nanocevko z obema rokama)
+			if (stevecRok <= 0) {
+				stevecRok= 0;
+				gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
+				gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(true);
+			}
 		}
 	}
 
