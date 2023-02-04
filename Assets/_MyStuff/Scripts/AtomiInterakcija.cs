@@ -27,7 +27,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			stevecRok++;
 			// Ce smo zaceli translirati, skalirati ali rotirati celotno Nanocev, izklopimo dolocene atome, da izboljsamo delovanje aplikacije
 			gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
-			gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(false);
+			//gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(false);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			if (stevecRok <= 0) {
 				stevecRok= 0;
 				gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
-				gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(true);
+				//gameObject.transform.GetChild(0).transform.Find("Carbon_mesh").gameObject.SetActive(true);
 			}
 		}
 	}
