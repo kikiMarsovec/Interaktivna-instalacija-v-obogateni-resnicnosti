@@ -74,8 +74,15 @@ public class NastavitevTunela : MonoBehaviour {
 
 	public void VstopiVTunel() {
 		if (!tunelNastavljen) {
+			// ce tunel se nima nastavljene ciljne pozicije, rotacije in velikosti ter kliknemo gumb za vstop, se pojavi ERROR
 			// TODO prikazi error uporabniku
 			Debug.Log("ERROR: Prej je treba nastaviti tunel");
+			return;
+		}
+		if (tunelVNastavljanju) {
+			// ce je tunel ze bil predhodno nastavljen in ga zopet nastavljamo ter kliknemo gumb za vstop, se pojavi  ERROR
+			// TODO prikazi error uporabniku
+			Debug.Log("ERROR: Dokler nastavljate tunel, vanj ni mogoce vstopiti.");
 			return;
 		}
 		// izklopimo komponente: box collider, object manipulator in near interaction grabbable
