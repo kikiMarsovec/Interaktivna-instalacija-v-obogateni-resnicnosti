@@ -15,6 +15,8 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	// (z njo razlikujemo med klikom in drzanjem atoma)
 	private float casInterakcije;
 
+
+
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
@@ -60,14 +62,21 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	void AtomKlik(GameObject atom) {
 		// TODO
-		Debug.Log("Klik: " + atom.name); // DELETE
+		// Debug.Log("Klik: " + atom.name); // DELETE
 		atom.GetComponent<Renderer>().material.color = Color.magenta; // DELETE
+
+		// TESTING SAVING
+		Debug.Log(atom.GetComponent<AtomPodatki>().emso);
 	}
 
 	void AtomDrzanje(GameObject atom) {
 		// TODO
-		Debug.Log("Drzanje: " + atom.name); // DELETE
+		// Debug.Log("Drzanje: " + atom.name); // DELETE
 		atom.GetComponent<Renderer>().material.color = Color.yellow; // DELETE
+
+		// TESTING SAVING
+		string novEmso = "Novo nastavljen emso.";
+		atom.GetComponent<AtomPodatki>().emso = novEmso;
 	}
 
 
