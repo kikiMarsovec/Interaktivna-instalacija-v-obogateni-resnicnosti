@@ -5,13 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-// Serializable data class, ki vsebuje atribute atomov (emso)
-[System.Serializable]
-public class AtomData {
-	public string emso;
-}
-
-// Unity ne more serializirati seznamov. S tem se izognemo temu problemu.
+// Unity ne more serializirati seznamov. Na tak nacin generiramo seznam, katerega lahko serializira.
 // TAKEN FROM: https://answers.unity.com/questions/1361721/converting-a-generic-list-to-json-in-unity.html
 [System.Serializable]
 public class SerializableList<T> {
@@ -29,7 +23,7 @@ public class SerializableList<T> {
 		this.list.RemoveAt(0);
 	}
 
-	public void Clear() {
+	public void Clear() { // metoda za praznenje seznama
 		this.list.Clear();
 	}
 }
@@ -40,16 +34,17 @@ public class SaveLoadAtoms : MonoBehaviour {
 	private void Awake() {
 		// pridobimo path,  kjer lahko shranimo podatke o atomih
 		path = Application.persistentDataPath + "/atom_data.json";
+
+		//path = "D:\\Downloads\\" + "atom_data.json"; // TODO DELETE
 	}
 
-	[SerializeField] private SerializableList<AtomData> atomDataList; //ustvarimo nov seznam, kamor bomo shranjevali atribute atomov (emso)
-	public void Save() {
+	// TODO zakaj tukaj tabimo dodati [SerializeField] ???
+	[SerializeField] private SerializableList<string> atomDataList; //ustvarimo nov seznam, kamor bomo shranjevali atribute atomov (emso)
+	public void SaveAtomData() {
 		// gremo cez vse atome in dodamo njihov emso v seznam
 		foreach (Transform group in transform.GetChild(0)) {
 			foreach (Transform child in group) {
-				AtomData atomData = new AtomData();
-				atomData.emso = child.GetChild(0).GetComponent<AtomPodatki>().emso;
-				atomDataList.Add(atomData);
+				atomDataList.Add(child.GetChild(0).GetComponent<AtomPodatki>().emso);
 			}
 		}
 		string json = JsonUtility.ToJson(atomDataList); // serializiramo seznam
@@ -59,16 +54,15 @@ public class SaveLoadAtoms : MonoBehaviour {
 		atomDataList.Clear();
 	}
 
-	public void Load() {
+	public void LoadAtomData() {
 		if (File.Exists(path)) {
 			string json = File.ReadAllText(path); // odpremo datoteko in preberemo datoteko (funkcija sama zapre datoteko)
-			atomDataList = JsonUtility.FromJson<SerializableList<AtomData>>(json); // json string pretvotimo v seznam
+			atomDataList = JsonUtility.FromJson<SerializableList<string>>(json); // json string pretvotimo v seznam
 
-			// gremo cez vse otroke in jim po vrsti dodeljujemo emso iz seznama
+			// gremo cez vse atome in jim po vrsti dodeljujemo emso iz seznama
 			foreach (Transform group in transform.GetChild(0)) {
 				foreach (Transform child in group) {
-					AtomData atomData = atomDataList.First();
-					child.GetChild(0).GetComponent<AtomPodatki>().emso = atomData.emso;
+					child.GetChild(0).GetComponent<AtomPodatki>().emso = atomDataList.First();
 					atomDataList.RemoveFirst();
 				}
 			}
