@@ -30,8 +30,13 @@ public class NastavitevTunela : MonoBehaviour {
 		atomiUpdate.enabled = false;
 	}
 
+	// TESTIRANJE TIPKOVNICE
+	public TouchScreenKeyboard tipkovnica;
+
 	public void NastaviTunel() {
 		// TODO FAJN BI BLO ZASCITIT TO Z NEKIM PIN-OM
+		// TESTIRANJE TIPKOVNICE
+		tipkovnica = TouchScreenKeyboard.Open("1234", TouchScreenKeyboardType.NumberPad, false, false, true, false, "4321", 4);
 
 		// Ce je tunel ze v nastavljanju, ne odpremo novega Dialog-a
 		if (tunelVNastavljanju) {
