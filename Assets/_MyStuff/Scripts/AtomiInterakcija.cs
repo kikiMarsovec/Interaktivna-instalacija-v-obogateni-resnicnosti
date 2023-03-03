@@ -2,6 +2,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
@@ -15,6 +16,12 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	// (z njo razlikujemo med klikom in drzanjem atoma)
 	private float casInterakcije;
 
+	// spremenljivka, ki pove, koliko casa moramo drzati atom, da izvedemo AtomDrzanje interakcijo
+	public float drzanjeAtomaCas = 3f;
+
+	// sem smo dodali Timer (Image) v editorju
+	public Image timer = null;
+
 
 
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
@@ -24,6 +31,11 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo) {
 			trenutnoInteraktiramo = true;
 			casInterakcije = Time.time;
+
+			// aktiviramo skripto za UI Timer in nastavimo koliko casa potrebuje da pride naokrog
+			timer.GetComponent<TimerUI>().enabled = true;
+			timer.GetComponent<TimerUI>().maxHoldTIme = drzanjeAtomaCas;
+
 		}
 		else if (string.Equals(trenutniGameObject.tag, "Nanocev")) {
 			stevecRok++;
@@ -40,7 +52,12 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo) {
 			trenutnoInteraktiramo = false;
 			casInterakcije = Time.time - casInterakcije;
-			if (casInterakcije < 1f) {
+
+			// izklopimo skripto za UI Timer in nastavimo fill amount na 0 (Timerja se ne vidi)
+			timer.GetComponent<TimerUI>().enabled = false;
+			timer.GetComponent<Image>().fillAmount = 0;
+
+			if (casInterakcije < drzanjeAtomaCas) {
 				// Atom smo kliknili
 				AtomKlik(trenutniGameObject);
 			}
