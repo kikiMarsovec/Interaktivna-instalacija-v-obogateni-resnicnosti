@@ -32,11 +32,16 @@ public class NastavitevTunela : MonoBehaviour {
 
 	// TESTIRANJE TIPKOVNICE
 	public TouchScreenKeyboard tipkovnica;
+	public void Update() {
+		if (tipkovnica != null) {
+			string tipkovnicaText = tipkovnica.text;
+		}
+	}
 
 	public void NastaviTunel() {
 		// TODO FAJN BI BLO ZASCITIT TO Z NEKIM PIN-OM
 		// TESTIRANJE TIPKOVNICE
-		tipkovnica = TouchScreenKeyboard.Open("1234", TouchScreenKeyboardType.NumberPad, false, false, true, false, "4321", 4);
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);
 
 		// Ce je tunel ze v nastavljanju, ne odpremo novega Dialog-a
 		if (tunelVNastavljanju) {
