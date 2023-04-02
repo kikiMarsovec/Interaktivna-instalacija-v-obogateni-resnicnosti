@@ -3,7 +3,9 @@ guid: c1c03e074f565fa4b9d164db92f9cdea
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - timer: {instanceID: 0}
+  - dialogPrefab: {fileID: 2680377478557818543, guid: 8e686c90124b8e14cbf8093893109e9a, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

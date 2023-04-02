@@ -1,4 +1,5 @@
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,9 @@ using UnityEngine.UI;
 public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// spremenljivka, ki nam pove, ali trenutno interaktiramo z atomom
-	// (preprecimo, da bi istocasno iteraktirali z vec atomi hkrati, poleg tega pa jo potrebujemo za prozenje UI timerja - Zato je javna)
-	public bool trenutnoInteraktiramo = false;
+	private bool trenutnoInteraktiramo = false;
+	// Ko imamo odprt Dialog, onemogocimo interakcijo (da uporabnik ne more odpreti prevec dialogov hkrati)
+	private bool dialogOdprt = false;
 	// spremenljivka, ki nam pove s koliko rokami trenutno drzimo celotno nanocevko
 	// (ko drzimo nanocevko z vsaj eno roko, izklopimo dolocene atome, za izboljsanje delovanja)
 	private int stevecRok = 0;
@@ -23,12 +25,17 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	public Image timer = null;
 
 
+	[SerializeField]
+	[Tooltip("Dodaj DialogMedium prefab")]
+	private GameObject dialogPrefab;
+
+
 
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
-		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo) {
+		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo && !dialogOdprt) {
 			trenutnoInteraktiramo = true;
 			casInterakcije = Time.time;
 
@@ -49,7 +56,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData) {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
-		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo) {
+		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo && !dialogOdprt) {
 			trenutnoInteraktiramo = false;
 			casInterakcije = Time.time - casInterakcije;
 
@@ -84,6 +91,21 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 		// TESTING SAVING
 		Debug.Log(atom.GetComponent<AtomPodatki>().emso);
+
+		// Odpremo Dialog, ki izpiše podatke o izbranem atomu (ime elementa, simbol za element, lokalno pozicijo?, status: zaseden/nezaseden, emso)
+		string vsebina = string.Format("Chemical element: {0}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), atom.GetComponent<AtomPodatki>().pridobiStatus(), atom.GetComponent<AtomPodatki>().emso);
+		Dialog atomKlikDialog = Dialog.Open(dialogPrefab, DialogButtonType.Close, "Atom info", vsebina, true);
+		//  onemogocimo  interakcijo  z  drugimi  atomi,  dokler je Dailog  odprt
+		dialogOdprt = true;
+		// ko se dialog zapre klicemo funkcijo dialogZaprt
+		if (atomKlikDialog != null)
+			atomKlikDialog.OnClosed += atomKlikDialogZaprt;
+	}
+
+	private void atomKlikDialogZaprt(DialogResult obj) {
+		// ko se  Dialog zapre spet  omogocimo  interakcijo
+		if (obj.Result == DialogButtonType.Close)
+			dialogOdprt = false;
 	}
 
 	void AtomDrzanje(GameObject atom) {
