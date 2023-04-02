@@ -93,7 +93,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		Debug.Log(atom.GetComponent<AtomPodatki>().emso);
 
 		// Odpremo Dialog, ki izpiše podatke o izbranem atomu (ime elementa, simbol za element, lokalno pozicijo?, status: zaseden/nezaseden, emso)
-		string vsebina = string.Format("Chemical element: {0}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), atom.GetComponent<AtomPodatki>().pridobiStatus(), atom.GetComponent<AtomPodatki>().emso);
+		string vsebina = string.Format("Chemical element: {0}\nLocal position:\n x: {4}\n y: {5}\n z: {6}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", 
+			atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), atom.GetComponent<AtomPodatki>().pridobiStatus(), atom.GetComponent<AtomPodatki>().emso,
+			atom.transform.parent.transform.localPosition.x.ToString(), atom.transform.parent.transform.localPosition.y.ToString(), atom.transform.parent.transform.localPosition.z.ToString());
 		Dialog atomKlikDialog = Dialog.Open(dialogPrefab, DialogButtonType.Close, "Atom info", vsebina, true);
 		//  onemogocimo  interakcijo  z  drugimi  atomi,  dokler je Dailog  odprt
 		dialogOdprt = true;
