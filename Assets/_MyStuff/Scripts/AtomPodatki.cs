@@ -36,4 +36,11 @@ public class AtomPodatki : MonoBehaviour {
 		}
 		return "Available";
 	}
+
+	public bool niZaseden() {
+		if (emso.Length > 0) {
+			return false;
+		}
+		return true;
+	}
 }

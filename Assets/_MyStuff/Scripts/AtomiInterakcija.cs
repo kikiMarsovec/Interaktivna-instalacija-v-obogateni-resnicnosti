@@ -9,11 +9,14 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// spremenljivka, ki nam pove, ali trenutno interaktiramo z atomom
 	private bool trenutnoInteraktiramo = false;
+
 	// Ko imamo odprt Dialog, onemogocimo interakcijo (da uporabnik ne more odpreti prevec dialogov hkrati)
 	private bool dialogOdprt = false;
+
 	// spremenljivka, ki nam pove s koliko rokami trenutno drzimo celotno nanocevko
 	// (ko drzimo nanocevko z vsaj eno roko, izklopimo dolocene atome, za izboljsanje delovanja)
 	private int stevecRok = 0;
+
 	// spremenljivka, ki belezi koliko casa interaktiramo z atomom
 	// (z njo razlikujemo med klikom in drzanjem atoma)
 	private float casInterakcije;
@@ -24,12 +27,16 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	// sem smo dodali Timer (Image) v editorju
 	public Image timer = null;
 
+	// sem shranimo atom v katerega se bo vpisal emso
+	private GameObject izbraniAtom = null;
 
 	[SerializeField]
 	[Tooltip("Dodaj DialogMedium prefab")]
-	private GameObject dialogPrefab;
-
-
+	private GameObject dialogMediumPrefab;
+	
+	[SerializeField]
+	[Tooltip("Dodaj DialogSmall prefab")]
+	private GameObject dialogSmallPrefab;
 
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
@@ -85,41 +92,61 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	}
 
 	void AtomKlik(GameObject atom) {
-		// TODO
-		// Debug.Log("Klik: " + atom.name); // DELETE
 		atom.GetComponent<Renderer>().material.color = Color.magenta; // DELETE
 
-		// TESTING SAVING
-		Debug.Log(atom.GetComponent<AtomPodatki>().emso);
-
 		// Odpremo Dialog, ki izpiše podatke o izbranem atomu (ime elementa, simbol za element, lokalno pozicijo?, status: zaseden/nezaseden, emso)
-		string vsebina = string.Format("Chemical element: {0}\nLocal position:\n x: {4}\n y: {5}\n z: {6}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", 
+		string vsebina = string.Format("Chemical element: {0}\nLocal position:\n x: {4,10:F2}\n y: {5,10:F2}\n z: {6,10:F2}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", 
 			atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), atom.GetComponent<AtomPodatki>().pridobiStatus(), atom.GetComponent<AtomPodatki>().emso,
-			atom.transform.parent.transform.localPosition.x.ToString(), atom.transform.parent.transform.localPosition.y.ToString(), atom.transform.parent.transform.localPosition.z.ToString());
-		Dialog atomKlikDialog = Dialog.Open(dialogPrefab, DialogButtonType.Close, "Atom info", vsebina, true);
+			atom.transform.parent.transform.localPosition.x, atom.transform.parent.transform.localPosition.y, atom.transform.parent.transform.localPosition.z);
+		Dialog atomKlikDialog = Dialog.Open(dialogMediumPrefab, DialogButtonType.Close, "Atom Info", vsebina, true);
 		//  onemogocimo  interakcijo  z  drugimi  atomi,  dokler je Dailog  odprt
 		dialogOdprt = true;
 		// ko se dialog zapre klicemo funkcijo dialogZaprt
 		if (atomKlikDialog != null)
-			atomKlikDialog.OnClosed += atomKlikDialogZaprt;
-	}
-
-	private void atomKlikDialogZaprt(DialogResult obj) {
-		// ko se  Dialog zapre spet  omogocimo  interakcijo
-		if (obj.Result == DialogButtonType.Close)
-			dialogOdprt = false;
+			atomKlikDialog.OnClosed += dialogZaprt;
 	}
 
 	void AtomDrzanje(GameObject atom) {
-		// TODO
-		// Debug.Log("Drzanje: " + atom.name); // DELETE
 		atom.GetComponent<Renderer>().material.color = Color.yellow; // DELETE
 
-		// TESTING SAVING
-		string novEmso = "Novo nastavljen emso.";
-		atom.GetComponent<AtomPodatki>().emso = novEmso;
+		string vsebina;
+		Dialog atomDrzanjeDialog;
+		// preverimo ali je atom ze izbran ali je na voljo, da uporabnik vanj vpise svoj emso
+		if (atom.GetComponent<AtomPodatki>().niZaseden()) {
+			// ustvarimo dialog kjer user lahko izbere vpis svojega emsa v atom
+			vsebina = string.Format("You have chosen {0} ({1}) atom with local position \nx = {2:F2}, y = {3:F2}, z = {4:F2}. The atom is available. After clicking the Accept button, you will enter your identification number inside the atom, which will end your walk among the atoms.",
+				atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(),
+				atom.transform.parent.transform.localPosition.x, atom.transform.parent.transform.localPosition.y, atom.transform.parent.transform.localPosition.z);
+			atomDrzanjeDialog = Dialog.Open(dialogMediumPrefab, DialogButtonType.Accept | DialogButtonType.Cancel, "Atom Available", vsebina, true);
+			// v izbraniAtom shranimo trenutni atom, da bomo v funkciji dialogZaprt vanj lahko vpisali emso
+			izbraniAtom = atom;
+		} else {
+			// ustvarimo dialog, ki opozori uporabnika, da je atom ze zaseden
+			vsebina = string.Format("You have chosen {0} ({1}) atom with local position \nx = {2:F2}, y = {3:F2}, z = {4:F2}. The atom is already taken, please choose another one.",
+				atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), 
+				atom.transform.parent.transform.localPosition.x, atom.transform.parent.transform.localPosition.y, atom.transform.parent.transform.localPosition.z);
+			atomDrzanjeDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "Atom Taken", vsebina, true);
+		}
+		dialogOdprt = true;
+		if (atomDrzanjeDialog != null) {
+			atomDrzanjeDialog.OnClosed += dialogZaprt;
+		}
 	}
 
+	private void dialogZaprt(DialogResult obj) {
+		// ko se  Dialog zapre spet  omogocimo  interakcijo
+		if (obj.Result == DialogButtonType.Close || obj.Result == DialogButtonType.Cancel)
+			dialogOdprt = false;
+		else if (obj.Result == DialogButtonType.Accept) {
+			dialogOdprt = false;
+			// TODO USER MUST ENTER HIS OWN EMSO VIA VOICE COMMAND
+			string novEmso = "12345678901234";
+			if (izbraniAtom != null)
+				izbraniAtom.GetComponent<AtomPodatki>().emso = novEmso;
+			else
+				throw new System.Exception("No atom chosen.");
+		}
+	}
 
 	// Teh metod ne bomo potrebovali, vseeno pa morajo biti implementirane
 	void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
