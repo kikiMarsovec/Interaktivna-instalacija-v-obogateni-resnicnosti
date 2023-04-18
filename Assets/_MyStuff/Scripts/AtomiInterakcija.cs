@@ -38,6 +38,10 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	[Tooltip("Dodaj DialogSmall prefab")]
 	private GameObject dialogSmallPrefab;
 
+	// Tu imamo speechHandler, da ga lahko aktiviramo in mu  podamo atom
+	[SerializeField]
+	private GameObject speechHandler;
+
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
@@ -139,12 +143,18 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			dialogOdprt = false;
 		else if (obj.Result == DialogButtonType.Accept) {
 			dialogOdprt = false;
-			// TODO USER MUST ENTER HIS OWN EMSO VIA VOICE COMMAND
-			string novEmso = "12345678901234";
-			if (izbraniAtom != null)
-				izbraniAtom.GetComponent<AtomPodatki>().emso = novEmso;
-			else
-				throw new System.Exception("No atom chosen.");
+			// TODO USER MUST ENTER HIS OWN EMSO VIA VOICE COMMAND  OR SYSTEM KEYBOARD
+			if (izbraniAtom != null) {
+				// Aktiviramo SpeechHandler in mu podamo atom, v katerega moramo vpisati emso
+				speechHandler.GetComponent<ObdelavaGlasovnihUkazov>().atom = izbraniAtom;
+				speechHandler.SetActive(true);
+				speechHandler.GetComponent<ObdelavaGlasovnihUkazov>().PrikaziDialogZNavodili();   // uporabniku pokazemo dialog z navodili za Glasovne Ukaze
+
+				// TODO - verjetno bi rabili tudi nek dialog, ki vprasa uporabnika ali bi rad vnesel EMSO z VoiceCommand ali s SystemKeyboard
+
+				// TODO - treba je izklopiti interakcijo  z atomi. Na teji tocki ni vec mogoce izbrati drugega atoma.  Ce  ne izklopim interakcije, je mozno izbrati nov atom med tem ko zapisujemo EMSO v ze izbran atom !!!!
+			} else
+				throw new System.Exception("No atom chosen."); // TODO PREVERI, DA SE TO NE MORA ZGODIT
 		}
 	}
 

@@ -31,7 +31,7 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 		// po 10 sekundah poklicemo funkcijo, ki skrije toolTip
 		Invoke("HideToolTip", 10f);
 		
-		// TODO Invoke naj bi slabo vplival  na performance  (poglej  dokumentacijo), baje da je bolje nadomestit s Coroutine
+		// TODO Invoke naj bi slabo vplival  na performance  (poglej  dokumentacijo), baje da je bolje nadomestit s Coroutine, testiraj na HoloLens ocalih, ce dejansko slabo vpliva na performance
 	}
 
 	private void HideToolTip() { // to metodo poklicemo z Invoke(...)

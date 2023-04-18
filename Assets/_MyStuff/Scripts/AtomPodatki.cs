@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI;
 
 public class AtomPodatki : MonoBehaviour {
 	public string emso = "";
+
+	[SerializeField]
+	private ToolTip toolTip;
 
 	public string pridobiIme() {
 		string parentName = gameObject.transform.parent.transform.parent.name;
@@ -42,5 +46,9 @@ public class AtomPodatki : MonoBehaviour {
 			return false;
 		}
 		return true;
+	}
+
+	public void UpdateToolTipText(string newText) { // Posodobimo tekst v Tooltip-u tega atoma
+		toolTip.ToolTipText = newText;
 	}
 }

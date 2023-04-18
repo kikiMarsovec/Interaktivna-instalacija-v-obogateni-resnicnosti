@@ -1,3 +1,4 @@
+using Microsoft.MixedReality.Toolkit.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +36,19 @@ public class AtomiUpdate : MonoBehaviour {
 
 		// zaradi premikanja cevke izklopimo dolocene atome za optimizacijo
 		gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
+
+		// gremo cez vse atome in tistim, ki so ze zasedeni (imajo EMSO) vklopimo EyeTrackingTarget (da bodo prikazovali Tooltipe) in nastavimo ToolTipText na EMSO
+		// TODO ce bo negativno vplivalo na performance, lahko probam izvesti to v Coroutini
+		// TODO zaenkrat gremo samo cez Holmium atome, naredi da gremo cez  vse
+		GameObject holmiumMesh = gameObject.transform.GetChild(0).transform.Find("Holmium_mesh").gameObject;
+		for (int i = 0; i < holmiumMesh.transform.childCount; i++) {
+			GameObject atom = holmiumMesh.transform.GetChild(i).GetChild(0).gameObject;
+			string currentEmso = atom.GetComponent<AtomPodatki>().emso;
+			if (currentEmso.Length > 0) {
+				atom.GetComponent<EyeTrackingTarget>().enabled = true;
+				atom.GetComponent<AtomPodatki>().UpdateToolTipText(currentEmso);
+			}
+		}
 	}
 
 	private void Update() {
