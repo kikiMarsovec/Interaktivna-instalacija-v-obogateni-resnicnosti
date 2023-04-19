@@ -30,26 +30,13 @@ public class NastavitevTunela : MonoBehaviour {
 		atomiUpdate.enabled = false;
 	}
 
-	// TESTIRANJE TIPKOVNICE
-	public TouchScreenKeyboard tipkovnica;
-	public void Update() {
-		if (tipkovnica != null) {
-			string tipkovnicaText = tipkovnica.text;
-		}
-	}
-
 	public void NastaviTunel() {
-		// TODO FAJN BI BLO ZASCITIT TO Z NEKIM PIN-OM
-		// TESTIRANJE TIPKOVNICE
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);
-
 		// Ce je tunel ze v nastavljanju, ne odpremo novega Dialog-a
 		if (tunelVNastavljanju) {
 			Debug.Log("ERROR: Tunel je ze v nastavljanju.");
 			return;
 		}
 		tunelVNastavljanju = true;
-
 
 		// ustvari se nov dialog
 		Dialog nastavljanjeTunelaDialog = Dialog.Open(dialogPrefab, DialogButtonType.Confirm | DialogButtonType.Cancel, "Nastavljanje tunela", "Nastavite tunel na željeno pozicijo, rotacijo in velikost in potrdite.", true);

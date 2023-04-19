@@ -1,7 +1,9 @@
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 // V AtomiUpdate.cs sem prestavil Update funkcijo iz NastavitevTunela.cs (Za optimizacijo).
 // Skripto bom aktiviral le takrat, ko jo potrebujem, takoj zatem pa jo bom deaktiviral.
@@ -24,6 +26,9 @@ public class AtomiUpdate : MonoBehaviour {
 	private Vector3 trenutnaHitrostSkaliranja = Vector3.zero;
 	private float casRotacije = 0.0f;
 
+	[SerializeField]
+	private GameObject dialogSmallPrefab;
+
 	public void nastaviZaklenjenostRotacijeZ(bool zakleni) {
 		zakleniRotacijoZ=zakleni;
 	}
@@ -39,19 +44,77 @@ public class AtomiUpdate : MonoBehaviour {
 
 		// gremo cez vse atome in tistim, ki so ze zasedeni (imajo EMSO) vklopimo EyeTrackingTarget (da bodo prikazovali Tooltipe) in nastavimo ToolTipText na EMSO
 		// TODO ce bo negativno vplivalo na performance, lahko probam izvesti to v Coroutini
-		// TODO zaenkrat gremo samo cez Holmium atome, naredi da gremo cez  vse
-		GameObject holmiumMesh = gameObject.transform.GetChild(0).transform.Find("Holmium_mesh").gameObject;
-		for (int i = 0; i < holmiumMesh.transform.childCount; i++) {
-			GameObject atom = holmiumMesh.transform.GetChild(i).GetChild(0).gameObject;
-			string currentEmso = atom.GetComponent<AtomPodatki>().emso;
-			if (currentEmso.Length > 0) {
-				atom.GetComponent<EyeTrackingTarget>().enabled = true;
-				atom.GetComponent<AtomPodatki>().UpdateToolTipText(currentEmso);
+		GameObject atomi = gameObject.transform.GetChild(0).gameObject;
+		for (int i = 0; i < atomi.transform.childCount; i++) {
+			GameObject atomMesh = atomi.transform.GetChild(i).gameObject;
+			for (int j = 0; j < atomMesh.transform.childCount; j++) {
+				GameObject atom = atomMesh.transform.GetChild(j).GetChild(0).gameObject;
+				Debug.Log(atom.name); // TODO DELETE
+				string currentEmso = atom.GetComponent<AtomPodatki>().emso;
+				if (currentEmso.Length > 0) {
+					atom.GetComponent<EyeTrackingTarget>().enabled = true;
+					atom.GetComponent<AtomPodatki>().UpdateToolTipText(currentEmso);
+				}
 			}
 		}
 	}
 
+
+	// System Keyboard
+	public TouchScreenKeyboard tipkovnica;
+
+	private bool vpisujemoPin = false;
+	public void OdpriTipkovnicoZaPin() {
+		if (vpisujemoPin)
+			return;
+		vpisujemoPin = true;
+		Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Setting up tunnel", "Setting up tunnel requires admin rights. Do you want to continue? After pressing Yes, you will be prompted to enter a PIN code.", true);
+		if (pinDialog != null) {
+			pinDialog.OnClosed += DialogClose;
+		}
+	}
+
+	private void DialogClose(DialogResult obj) {
+		if (obj.Result == DialogButtonType.Yes) {
+			// uporanbnik zeli vnesti pin, aktiviramo tipkovnico
+			tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);
+		} else if (obj.Result == DialogButtonType.No) {
+			// uporabnik ne zeli vnesti pin-a, zato deaktiviramo to skripto
+			vpisujemoPin = false;
+			this.enabled = false;
+		}
+	}
+
 	private void Update() {
+
+		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
+		if (Input.GetKeyDown(KeyCode.Alpha1)) {
+			gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+		}
+		// DELETE  TO HERE (This is only for testing in  Unity Editor)
+
+
+		if (tipkovnica != null) {
+			if (vpisujemoPin) {
+				if (tipkovnica.text.Length == 4) {
+					if (tipkovnica.text == "2525") {
+						// TODO ali se da PIN kodo morda nekam skriti?
+
+						// uporabnik je vnesel pravilen PIN
+						// klicemo funkcijo za nastavljanje pin-a
+						gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+					} else {
+						// uporabnik ni vnesel pravilen PIN
+						// odpremo dialog in sporocimo uporabniku, da pin ni pravilen
+						Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "PIN incorrect", "The PIN code you have entered is incorrect.", true);
+					}
+					// izklopimo to skripto
+					tipkovnica.active = false;
+					vpisujemoPin = false;
+					this.enabled = false;
+				}
+			}
+		}
 		if (zakleniRotacijoZ) {
 			transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
 		}
