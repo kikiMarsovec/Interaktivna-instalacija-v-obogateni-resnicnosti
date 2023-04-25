@@ -49,7 +49,6 @@ public class AtomiUpdate : MonoBehaviour {
 			GameObject atomMesh = atomi.transform.GetChild(i).gameObject;
 			for (int j = 0; j < atomMesh.transform.childCount; j++) {
 				GameObject atom = atomMesh.transform.GetChild(j).GetChild(0).gameObject;
-				Debug.Log(atom.name); // TODO DELETE
 				string currentEmso = atom.GetComponent<AtomPodatki>().emso;
 				if (currentEmso.Length > 0) {
 					atom.GetComponent<EyeTrackingTarget>().enabled = true;

@@ -44,6 +44,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
+		Debug.Log("Prijemam"); // TODO DELETE
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo && !dialogOdprt) {
@@ -65,6 +66,7 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// Ta metoda se poklice ko koncamo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData) {
+		Debug.Log("Spuscam"); // TODO DELETE
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo && !dialogOdprt) {
