@@ -66,7 +66,7 @@ GameObject:
   - component: {fileID: 2626966120546397499}
   - component: {fileID: 1905005188164547444}
   - component: {fileID: 3778883897397287485}
-  - component: {fileID: 5989983846470298899}
+  - component: {fileID: 6247350958434131950}
   m_Layer: 0
   m_Name: Atom_LOD1
   m_TagString: Atom
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolTip: {fileID: 3121349819478626462}
---- !u!114 &5989983846470298899
+--- !u!114 &6247350958434131950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,61 +201,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5511121646146936302}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1e6657bab90ac149872e5361b42ea62, type: 3}
+  m_Script: {fileID: 11500000, guid: 90ed57c25fc9c2248807aeba50638ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectAction:
-    id: 0
-    description: None
-    axisConstraint: 0
-  voiceSelect: []
-  dwellTimeInSec: 0.8
-  onLookAtStart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3778883897397287485}
-        m_TargetAssemblyTypeName: ToolTipPrikazovanje, Assembly-CSharp
-        m_MethodName: ShowToolTip
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  whileLookingAtTarget:
-    m_PersistentCalls:
-      m_Calls: []
-  onLookAway:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3778883897397287485}
-        m_TargetAssemblyTypeName: ToolTipPrikazovanje, Assembly-CSharp
-        m_MethodName: HideToolTipWithDelay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onDwell:
-    m_PersistentCalls:
-      m_Calls: []
-  onSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  onTapDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onTapUp:
-    m_PersistentCalls:
-      m_Calls: []
-  eyeCursorSnapToTargetCenter: 0
 --- !u!1001 &3121727246085167006
 PrefabInstance:
   m_ObjectHideFlags: 0

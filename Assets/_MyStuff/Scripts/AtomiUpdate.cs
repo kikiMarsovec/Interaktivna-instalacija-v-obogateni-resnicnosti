@@ -51,7 +51,8 @@ public class AtomiUpdate : MonoBehaviour {
 				GameObject atom = atomMesh.transform.GetChild(j).GetChild(0).gameObject;
 				string currentEmso = atom.GetComponent<AtomPodatki>().emso;
 				if (currentEmso.Length > 0) {
-					atom.GetComponent<EyeTrackingTarget>().enabled = true;
+					//atom.GetComponent<EyeTrackingTarget>().enabled = true; // NE UPORABLJAM VEC  EYETRACKINGTARGET
+					atom.GetComponent<CustomEyeTrackingTarget>().enabled = true;
 					atom.GetComponent<AtomPodatki>().UpdateToolTipText(currentEmso);
 				}
 			}

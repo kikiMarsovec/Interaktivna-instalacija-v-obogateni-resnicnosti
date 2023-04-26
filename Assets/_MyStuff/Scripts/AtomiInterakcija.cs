@@ -30,6 +30,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	// sem shranimo atom v katerega se bo vpisal emso
 	private GameObject izbraniAtom = null;
 
+	// s to spremenljivko  preprecimo, da bi uporabnik med vpisovanjem emsa izbral se en atom
+	private bool trenutnoVpisujemoEmso = false;
+
 	[SerializeField]
 	[Tooltip("Dodaj DialogMedium prefab")]
 	private GameObject dialogMediumPrefab;
@@ -44,7 +47,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
-		Debug.Log("Prijemam"); // TODO DELETE
+		if (trenutnoVpisujemoEmso)
+			return;
+
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo && !dialogOdprt) {
@@ -66,7 +71,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 	// Ta metoda se poklice ko koncamo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData) {
-		Debug.Log("Spuscam"); // TODO DELETE
+		if (trenutnoVpisujemoEmso)
+			return;
+
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo && !dialogOdprt) {
@@ -98,8 +105,6 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	}
 
 	void AtomKlik(GameObject atom) {
-		atom.GetComponent<Renderer>().material.color = Color.magenta; // DELETE
-
 		// Odpremo Dialog, ki izpiše podatke o izbranem atomu (ime elementa, simbol za element, lokalno pozicijo?, status: zaseden/nezaseden, emso)
 		string vsebina = string.Format("Chemical element: {0}\nLocal position:\n x: {4,10:F2}\n y: {5,10:F2}\n z: {6,10:F2}\nSymbol: {1}\nStatus: {2}\nUserID: {3}", 
 			atom.GetComponent<AtomPodatki>().pridobiIme(), atom.GetComponent<AtomPodatki>().pridobiSimbol(), atom.GetComponent<AtomPodatki>().pridobiStatus(), atom.GetComponent<AtomPodatki>().emso,
@@ -113,8 +118,6 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	}
 
 	void AtomDrzanje(GameObject atom) {
-		atom.GetComponent<Renderer>().material.color = Color.yellow; // DELETE
-
 		string vsebina;
 		Dialog atomDrzanjeDialog;
 		// preverimo ali je atom ze izbran ali je na voljo, da uporabnik vanj vpise svoj emso
@@ -154,7 +157,8 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 				// TODO - verjetno bi rabili tudi nek dialog, ki vprasa uporabnika ali bi rad vnesel EMSO z VoiceCommand ali s SystemKeyboard
 
-				// TODO - treba je izklopiti interakcijo  z atomi. Na teji tocki ni vec mogoce izbrati drugega atoma.  Ce  ne izklopim interakcije, je mozno izbrati nov atom med tem ko zapisujemo EMSO v ze izbran atom !!!!
+				// izklopimo interakcijo z atomi
+				trenutnoVpisujemoEmso = true;
 			} else
 				throw new System.Exception("No atom chosen."); // TODO PREVERI, DA SE TO NE MORA ZGODIT
 		}

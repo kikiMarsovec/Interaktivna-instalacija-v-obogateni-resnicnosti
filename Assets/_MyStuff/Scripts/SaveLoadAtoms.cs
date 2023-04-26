@@ -63,6 +63,15 @@ public class SaveLoadAtoms : MonoBehaviour {
 			foreach (Transform group in transform.GetChild(0)) {
 				foreach (Transform child in group) {
 					child.GetChild(0).GetComponent<AtomPodatki>().emso = atomDataList.First();
+
+					// TODO DELETE FROM HERE
+
+					// atome, ki  imajo emso pobarvamo na rumeno, zaradi lazjega testiranja
+					if (atomDataList.First().Length > 0)
+						child.GetChild(0).GetComponent<Renderer>().material.color = Color.yellow; // DELETE
+
+					// TODO DELETE TO HERE
+
 					atomDataList.RemoveFirst();
 				}
 			}

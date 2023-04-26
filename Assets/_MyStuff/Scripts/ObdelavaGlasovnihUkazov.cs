@@ -19,8 +19,6 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private GameObject dialogSmallPrefab; 
 	
 	private void OnEnable() {
-		// TODO maybe tukaj prikazi dialog z navodili uporabniku ???
-
 		// shranimo komponenti ToolTipPrikazovanje in AtomPodatki  atoma, saj bomo do njih  pogosto dostopali
 		toolTipPrikazovanje = atom.GetComponent<ToolTipPrikazovanje>();
 		atomPodatki = atom.GetComponent<AtomPodatki>();
@@ -53,6 +51,10 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 
 	// preverimo, ali je uporabnik vnesel pravilen EMSO (z Dialogom). Ce je, shranimo emso v atom. Nato naj bi se aplikacija  zaprla.  Ce  ni  vnesel  pravilnega, mu se enkrat  odpremo  dialog ali  bi poskusil z VoiceCommand ali s SystemKeyboard
 	public void EndSpeech() {
+		// preverimo, da emso ni slucajno prazen
+		if (emso.Length <= 0)
+			return;
+
 		// Uporabniku prikazemo dialog, ki preveri ali je pravilen EMSO
 		Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?","UserID: " + emso, true);
 		if (endSpeechDialog != null) {
@@ -65,7 +67,9 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			// Shranimo emso v izbrani  atom in posodobimo ToolTip
 			atomPodatki.emso = emso;
 			atomPodatki.UpdateToolTipText(emso);
-			// TODO aplikacija se mora zapreti (ampak najprej moramo disablati to skripto)
+			toolTipPrikazovanje.VsiliToolTipShow(false); // izklopimo toolTip override
+			this.enabled = false; // izklopimo to skripto
+			// TODO aplikacija se mora zapreti 
 		} else if (obj.Result == DialogButtonType.No) {
 			// Nastavimo emso nazaj na prazen string in vprasamo uporabnika ali zeli poskusiti ponovno z voiceCommand, ali zeli poskusiti s SystemKeyboard
 			emso = "";
