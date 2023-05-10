@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: 6318727103230476934}
   - component: {fileID: 8361484783457279001}
   - component: {fileID: 1393130042504340711}
-  - component: {fileID: 7447028114808172688}
+  - component: {fileID: 5966647095249721888}
+  - component: {fileID: 3403169150878637666}
   m_Layer: 0
   m_Name: Atom_LOD1
   m_TagString: Atom
@@ -141,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolTip: {fileID: 7922812533995219807}
---- !u!114 &7447028114808172688
+--- !u!114 &5966647095249721888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +151,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 3644071248604649763}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ed57c25fc9c2248807aeba50638ab4, type: 3}
+  m_Script: {fileID: 11500000, guid: e1e6657bab90ac149872e5361b42ea62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectAction:
+    id: 0
+    description: None
+    axisConstraint: 0
+  voiceSelect: []
+  dwellTimeInSec: 0.8
+  onLookAtStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1393130042504340711}
+        m_TargetAssemblyTypeName: ToolTipPrikazovanje, Assembly-CSharp
+        m_MethodName: ShowToolTip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  whileLookingAtTarget:
+    m_PersistentCalls:
+      m_Calls: []
+  onLookAway:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1393130042504340711}
+        m_TargetAssemblyTypeName: ToolTipPrikazovanje, Assembly-CSharp
+        m_MethodName: HideToolTipWithDelay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDwell:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  onTapDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onTapUp:
+    m_PersistentCalls:
+      m_Calls: []
+  eyeCursorSnapToTargetCenter: 0
+--- !u!114 &3403169150878637666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3644071248604649763}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b89af61192e8b545a1c78c13af54b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9089320669710679551
