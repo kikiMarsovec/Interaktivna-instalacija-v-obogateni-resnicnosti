@@ -21,7 +21,11 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 		toolTip.SetActive(true);
 		// toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 0.25f, 0f); // TODO to ne dela, ce imamo zelo  majhno nanocevko, ker je ToolTip prevec zgoraj
 		// toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, toolTip.transform.GetChild(1).transform.position.y, 0f);
-		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.25f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
+		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.2f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
+
+		// nastavimo velikost tooltip-a 
+		Vector3 toolTipSize = new Vector3(1.6f, 1.6f, 1.6f) - gameObject.transform.parent.transform.localScale;
+		toolTip.transform.GetChild(1).transform.localScale += toolTipSize;
 	}
 
 	public void HideToolTipWithDelay() {
@@ -45,7 +49,12 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 			// nastavimo pivot na ustrezno globalno pozicijo (nad atom) in prikazemo ToolTip
 			showToolTipNoMatterWhat = true;
 			toolTip.SetActive(true);
-			toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.25f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
+			toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.2f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
+
+			// nastavimo velikost tooltip-a
+			Vector3 toolTipSize = new Vector3(1.6f, 1.6f, 1.6f) - gameObject.transform.parent.transform.localScale;
+			toolTip.transform.GetChild(1).transform.localScale += toolTipSize;
+
 		} else {
 			showToolTipNoMatterWhat = false;
 			toolTip.SetActive(false);
