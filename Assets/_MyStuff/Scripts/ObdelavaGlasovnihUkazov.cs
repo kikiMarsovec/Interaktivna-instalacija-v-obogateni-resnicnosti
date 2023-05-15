@@ -77,6 +77,11 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			atomPodatki.emso = emso;
 			atomPodatki.UpdateToolTipText(emso);
 			toolTipPrikazovanje.VsiliToolTipShow(false); // izklopimo toolTip override
+
+			// TODO DELETE THIS SHIT
+			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "So this is the ID you saved", "UserID: " + atomPodatki.emso, true); // TODO DELETE
+			// TODO DELETE THIS SHIT
+
 			this.enabled = false; // izklopimo to skripto
 			// TODO aplikacija se mora zapreti 
 		} else if (obj.Result == DialogButtonType.No) {
@@ -109,11 +114,13 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		if (navodilaDialog != null) {
 			navodilaDialog.OnClosed += EndKeyboard;
 		}
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
 	}
 
 	private void EndKeyboard(DialogResult obj) {
+		// TODO PREVERIT MORMO, ALI JE EMSO LENGTH > 1, SICER MORAMO SE ENKRAT KLICAT FUNKCIJO "VklopiSystemKeyboard" IN SPOROCIT UPORABNIKU, DA MORA EMSO BIT VSAJ 1 CHAR DOLG (JEBISE)
 		if (obj.Result == DialogButtonType.Confirm) {
+			emso = tipkovnicaTekst;
 			tipkovnica.active = false;
 			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?", "UserID: " + emso, true);
 			if (endSpeechDialog != null) {
@@ -121,6 +128,8 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			}
 		}
 	}
+
+	private string tipkovnicaTekst;
 
 	void Update() {
 
@@ -137,11 +146,11 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		// TODO DELETE TO HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
 
 		if (tipkovnica != null) {
-			emso = tipkovnica.text;
-			if (emso.Length < 1) {
+			tipkovnicaTekst = tipkovnica.text;
+			if (tipkovnicaTekst.Length < 1) {
 				atomPodatki.UpdateToolTipText("UserID:");
 			} else {
-				atomPodatki.UpdateToolTipText(emso);
+				atomPodatki.UpdateToolTipText(tipkovnicaTekst);
 			}
 		}
 	}
