@@ -23,7 +23,6 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 		// velikost tooltipa je vecja, ce je atom manjsi
 		Vector3 toolTipSize = new Vector3(1.6f, 1.6f, 1.6f) - gameObject.transform.parent.transform.localScale;
 		toolTip.transform.GetChild(1).transform.localScale += toolTipSize * 3;
-		Debug.Log("Vecamo size");
 	}
 
 	public void ShowToolTip() {

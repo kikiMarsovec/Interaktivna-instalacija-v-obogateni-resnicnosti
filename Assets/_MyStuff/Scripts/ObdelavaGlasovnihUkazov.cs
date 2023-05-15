@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
 public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 
@@ -16,7 +17,12 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private AtomPodatki atomPodatki;
 
 	[SerializeField]
-	private GameObject dialogSmallPrefab; 
+	private GameObject dialogSmallPrefab;
+
+	[SerializeField]
+	private GameObject voiceOrKeyboardNearMenu;
+
+	private bool vpisujemoZVoiceCommand = false;
 	
 	private void OnEnable() {
 		// shranimo komponenti ToolTipPrikazovanje in AtomPodatki  atoma, saj bomo do njih  pogosto dostopali
@@ -27,18 +33,19 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		toolTipPrikazovanje.VsiliToolTipShow(true);
 		atomPodatki.UpdateToolTipText("UserID:");
 	}
-	private void OnDisable() {
-		// TODO tukaj klici funkcijo VsiliToolTipShow(false) AMPAK PREVIDNO!!!! -> Ko se aplikacija zapre, ti bo tukaj metalo ERROR. Nekako se izogni temu.	(Mogoce bi lahko disablal to skripto preden se ugasne program)
-	}
 
 	// stevko shranimo v emso in posodobimo ToolTip
 	public void SaveNumber(int number) {
+		if (!vpisujemoZVoiceCommand)
+			return;
 		emso += number.ToString();
 		atomPodatki.UpdateToolTipText(emso);
 	}
 
 	// odstranimo zadnjo stevilko iz stringa emso (ce ta obstaja) in posodobimo ToolTip
 	public void DeleteNumber() {
+		if (!vpisujemoZVoiceCommand)
+			return;
 		if (emso.Length > 0) {
 			emso = emso.Substring(0, emso.Length - 1);
 			if (emso.Length == 0) {
@@ -51,6 +58,8 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 
 	// preverimo, ali je uporabnik vnesel pravilen EMSO (z Dialogom). Ce je, shranimo emso v atom. Nato naj bi se aplikacija  zaprla.  Ce  ni  vnesel  pravilnega, mu se enkrat  odpremo  dialog ali  bi poskusil z VoiceCommand ali s SystemKeyboard
 	public void EndSpeech() {
+		if (!vpisujemoZVoiceCommand)
+			return;
 		// preverimo, da emso ni slucajno prazen
 		if (emso.Length <= 0)
 			return;
@@ -73,15 +82,50 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		} else if (obj.Result == DialogButtonType.No) {
 			// Nastavimo emso nazaj na prazen string in vprasamo uporabnika ali zeli poskusiti ponovno z voiceCommand, ali zeli poskusiti s SystemKeyboard
 			emso = "";
-			// TODO Dialog
+			vpisujemoZVoiceCommand = false;
+			PrikaziDialogZNavodili();
 		}
 	}
 
 	public void PrikaziDialogZNavodili() {
-		Dialog navodilaDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "Read your UserID", "Read your UserId (from your ID card) loudly and slowly, digit by digit. To delete the last digit, say \"Delete\". When you finish, say \"Over\".", true);
+		// prikazemo NearMenu, kjer uporabnik izbira ali bo vpisal EMSO z glasovnimi ukazi ali s tipkovnico
+		voiceOrKeyboardNearMenu.SetActive(true);
+		voiceOrKeyboardNearMenu.transform.position = CameraCache.Main.transform.position + new Vector3(0f,0f,0.5f);
 	}
 
-	void Update() { // TODO DELETE, zaenkrat uporabljam samo za testiranje v Unity Editor
+	public void VklopiVoiceCommand() {
+		voiceOrKeyboardNearMenu.SetActive(false);
+
+		Dialog navodilaDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "Read your UserID", "Read your UserId (from your ID card) loudly and slowly, digit by digit. To delete the last digit, say \"Delete\". When you finish, say \"Over\".", true);
+		vpisujemoZVoiceCommand = true;
+	}
+
+	public TouchScreenKeyboard tipkovnica;
+
+	public void VklopiSystemKeyboard() {
+		voiceOrKeyboardNearMenu.SetActive(false);
+
+		Dialog navodilaDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Confirm, "Type your UserID", "Type your UserID via the System Keyboard. Once you are finished, press \"Confirm\".", true);
+		if (navodilaDialog != null) {
+			navodilaDialog.OnClosed += EndKeyboard;
+		}
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);
+	}
+
+	private void EndKeyboard(DialogResult obj) {
+		if (obj.Result == DialogButtonType.Confirm) {
+			tipkovnica.active = false;
+			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?", "UserID: " + emso, true);
+			if (endSpeechDialog != null) {
+				endSpeechDialog.OnClosed += DialogClose;
+			}
+		}
+	}
+
+	void Update() {
+
+		// TODO DELETE FROM HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
+		/*
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
 			SaveNumber(Random.Range(0, 10));
 		} else if (Input.GetKeyDown(KeyCode.Alpha2)) {
@@ -89,5 +133,16 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.Alpha3)) {
 			EndSpeech();
 		}
-    }
+		*/
+		// TODO DELETE TO HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
+
+		if (tipkovnica != null) {
+			emso = tipkovnica.text;
+			if (emso.Length < 1) {
+				atomPodatki.UpdateToolTipText("UserID:");
+			} else {
+				atomPodatki.UpdateToolTipText(emso);
+			}
+		}
+	}
 }
