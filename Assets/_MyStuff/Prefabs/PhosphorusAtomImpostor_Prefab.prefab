@@ -142,6 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolTip: {fileID: 7922812533995219807}
+  toolTipVelikost: {x: 2, y: 2, z: 2}
+  toolTipPozicija: {x: 0, y: 0.02, z: 0}
 --- !u!114 &5966647095249721888
 MonoBehaviour:
   m_ObjectHideFlags: 0

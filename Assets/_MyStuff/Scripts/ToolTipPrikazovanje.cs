@@ -13,30 +13,21 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	// s to spremenljivko preprecimo, da eyeGaze vpliva na prikazovanje  in skrivanje toolTip-a
 	private bool showToolTipNoMatterWhat = false;
 
-	private bool sizeSet = false;
-
-	private void SetToolTipSize() { // samo enkrat nastavimo toolTipSize
-		if (sizeSet)
-			return;
-		sizeSet = true;
-
-		// velikost tooltipa je vecja, ce je atom manjsi
-		Vector3 toolTipSize = new Vector3(1.6f, 1.6f, 1.6f) - gameObject.transform.parent.transform.localScale;
-		toolTip.transform.GetChild(1).transform.localScale += toolTipSize * 3;
-	}
+	public Vector3 toolTipVelikost = new Vector3(1f,1f,1f);
+	public Vector3 toolTipPozicija = new Vector3(0f,1f,0f);
+	public Vector3 toolTipBackgroundVelikost = new Vector3(0.125f,0.023f,1f);
 
 	public void ShowToolTip() {
 		if (showToolTipNoMatterWhat)
 			return;
-		// prikazemo toolTip in ga nastavimo na ustrezno pozicijo (malo nad atom)
+		// nastavimo velikost in  pozicijo tooltip-a in velikost TipBackground-a
+		float velikostNanocevke = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.localScale.x;
+		toolTip.transform.GetChild(1).transform.localScale = toolTipVelikost;
+		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + toolTipPozicija * velikostNanocevke;
+		toolTip.transform.GetChild(1).transform.GetChild(0).transform.GetChild(1).transform.localScale = toolTipBackgroundVelikost;
+		// prikazemo toolTip
 		gledamoVTooltip = true;
 		toolTip.SetActive(true);
-		// toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 0.25f, 0f); // TODO to ne dela, ce imamo zelo  majhno nanocevko, ker je ToolTip prevec zgoraj
-		// toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, toolTip.transform.GetChild(1).transform.position.y, 0f);
-		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.2f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
-
-		// nastavimo velikost tooltip-a 
-		SetToolTipSize();
 	}
 
 	public void HideToolTipWithDelay() {
@@ -57,14 +48,14 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	// s to metodo preprecimo, da EyeGaze vpliva  na prikazovanje in skrivanje ToolTip-a. S spremenljivko show povemo ali zelimo ToolTip prikazati  ali skriti
 	public void VsiliToolTipShow(bool show) {
 		if (show) {
-			// nastavimo pivot na ustrezno globalno pozicijo (nad atom) in prikazemo ToolTip
+			// nastavimo velikost in  pozicijo tooltip-a in velikost TipBackground-a
+			float velikostNanocevke = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.localScale.x;
+			toolTip.transform.GetChild(1).transform.localScale = toolTipVelikost;
+			toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + toolTipPozicija * velikostNanocevke;
+			toolTip.transform.GetChild(1).transform.GetChild(0).transform.GetChild(1).transform.localScale = toolTipBackgroundVelikost;
+			// prikazemo ToolTip
 			showToolTipNoMatterWhat = true;
 			toolTip.SetActive(true);
-			toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + new Vector3(0f, 1.2f * gameObject.transform.lossyScale.y, 0f); // pozicijo nastavimo glede na globalno velikost atoma
-
-			// nastavimo velikost tooltip-a
-			SetToolTipSize();
-
 		} else {
 			showToolTipNoMatterWhat = false;
 			toolTip.SetActive(false);
