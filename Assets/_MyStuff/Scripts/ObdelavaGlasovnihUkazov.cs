@@ -23,8 +23,15 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private GameObject voiceOrKeyboardNearMenu;
 
 	private bool vpisujemoZVoiceCommand = false;
+
+	[SerializeField]
+	private GameObject atomi;
+
+	private AtomiUpdate atomiUpdate;
 	
 	private void OnEnable() {
+		atomiUpdate = atomi.GetComponent<AtomiUpdate>();
+
 		// shranimo komponenti ToolTipPrikazovanje in AtomPodatki  atoma, saj bomo do njih  pogosto dostopali
 		toolTipPrikazovanje = atom.GetComponent<ToolTipPrikazovanje>();
 		atomPodatki = atom.GetComponent<AtomPodatki>();
@@ -114,7 +121,8 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		if (navodilaDialog != null) {
 			navodilaDialog.OnClosed += EndKeyboard;
 		}
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
+		atomiUpdate.OdpriTipkovnicoZaEmso();
 	}
 
 	private void EndKeyboard(DialogResult obj) {
