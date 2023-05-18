@@ -122,7 +122,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			navodilaDialog.OnClosed += EndKeyboard;
 		}
 		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
-		atomiUpdate.OdpriTipkovnicoZaEmso();
+		// atomiUpdate.OdpriTipkovnicoZaEmso();
 	}
 
 	private void EndKeyboard(DialogResult obj) {

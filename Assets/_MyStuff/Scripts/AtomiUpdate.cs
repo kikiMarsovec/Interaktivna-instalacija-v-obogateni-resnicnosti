@@ -85,9 +85,9 @@ public class AtomiUpdate : MonoBehaviour {
 		}
 	}
 
-	public void OdpriTipkovnicoZaEmso() {
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);
-	}
+	// public void OdpriTipkovnicoZaEmso() {
+	// 	tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);
+	// }
 
 	private void Update() {
 
