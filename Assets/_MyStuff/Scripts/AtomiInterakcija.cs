@@ -45,6 +45,12 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 	[SerializeField]
 	private GameObject speechHandler;
 
+	private void Start() {
+		// Na zacetku nalozimo ze shranjene podatke
+		gameObject.GetComponent<SaveLoadAtoms>().LoadAtomData();
+	}
+
+
 	// Ta metoda se poklice ko zacnemo interakcijo z nekim objektom
 	void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData) {
 		if (trenutnoVpisujemoEmso)

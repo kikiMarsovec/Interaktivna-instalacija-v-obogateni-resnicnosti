@@ -85,12 +85,12 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			atomPodatki.UpdateToolTipText(emso);
 			toolTipPrikazovanje.VsiliToolTipShow(false); // izklopimo toolTip override
 
-			// TODO DELETE THIS SHIT
-			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "So this is the ID you saved", "UserID: " + atomPodatki.emso, true); // TODO DELETE
-			// TODO DELETE THIS SHIT
-
 			this.enabled = false; // izklopimo to skripto
-			// TODO aplikacija se mora zapreti 
+
+			// TODO aplikacija se mora nekako resetirati, da lahko potem  nov uporabnik  zacne od   zacetka (vseeno  pa moramo ohraniti prej  nastavljeno pozicijo, rotacijo in velikost tunela, da ne rabi se zopet nastavljat)
+			// TODO mogoce bi SaveAtomData in vse ostale stvari  lahko   dal v posebno funkcijo, da ne bo zmesnjava
+			atomi.GetComponent<SaveLoadAtoms>().SaveAtomData();
+			
 		} else if (obj.Result == DialogButtonType.No) {
 			// Nastavimo emso nazaj na prazen string in vprasamo uporabnika ali zeli poskusiti ponovno z voiceCommand, ali zeli poskusiti s SystemKeyboard
 			emso = "";
