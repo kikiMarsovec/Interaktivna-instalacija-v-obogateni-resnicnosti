@@ -61,4 +61,11 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 			toolTip.SetActive(false);
 		}
 	}
+
+
+	public void ResetirajSkripto() {
+		gledamoVTooltip = false;
+		showToolTipNoMatterWhat = false;
+		toolTip.SetActive(false);
+	}
 }

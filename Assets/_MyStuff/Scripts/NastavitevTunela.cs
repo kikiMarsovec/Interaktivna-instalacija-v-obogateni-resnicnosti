@@ -33,7 +33,7 @@ public class NastavitevTunela : MonoBehaviour {
 	public void NastaviTunel() {
 		// Ce je tunel ze v nastavljanju, ne odpremo novega Dialog-a
 		if (tunelVNastavljanju) {
-			Debug.Log("ERROR: Tunel je ze v nastavljanju.");
+			Debug.Log("ERROR: Tunel je ze v nastavljanju."); //  TODO
 			return;
 		}
 		tunelVNastavljanju = true;
@@ -91,5 +91,11 @@ public class NastavitevTunela : MonoBehaviour {
 		// Klicemo funkcioj, ki zacne premikati cevko v Update funkciji
 		atomiUpdate.enabled = true;
 		atomiUpdate.zacniAnimacijoCevke(tunelPozicija, tunelRotacija, tunelVelikost);
+	}
+
+	public void ResetirajSkripto() {
+		GetComponent<BoxCollider>().enabled = true;
+		GetComponent<ObjectManipulator>().enabled = true;
+		GetComponent<NearInteractionGrabbable>().enabled = true;
 	}
 }

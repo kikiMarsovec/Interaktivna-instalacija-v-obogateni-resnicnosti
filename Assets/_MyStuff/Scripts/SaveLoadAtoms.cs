@@ -34,8 +34,6 @@ public class SaveLoadAtoms : MonoBehaviour {
 	private void Awake() {
 		// pridobimo path,  kjer lahko shranimo podatke o atomih
 		path = Application.persistentDataPath + "/atom_data.json";
-
-		//path = "D:\\Downloads\\" + "atom_data.json"; // TODO DELETE
 	}
 
 	// TODO zakaj tukaj tabimo dodati [SerializeField] ???

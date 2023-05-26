@@ -154,24 +154,27 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 			dialogOdprt = false;
 		else if (obj.Result == DialogButtonType.Accept) {
 			dialogOdprt = false;
-			// TODO USER MUST ENTER HIS OWN EMSO VIA VOICE COMMAND  OR SYSTEM KEYBOARD
 			if (izbraniAtom != null) {
 				// Aktiviramo SpeechHandler in mu podamo atom, v katerega moramo vpisati emso
 				speechHandler.GetComponent<ObdelavaGlasovnihUkazov>().atom = izbraniAtom;
 				speechHandler.SetActive(true);
 				speechHandler.GetComponent<ObdelavaGlasovnihUkazov>().PrikaziDialogZNavodili();   // uporabniku pokazemo dialog z navodili za Glasovne Ukaze
 
-				// TODO - verjetno bi rabili tudi nek dialog, ki vprasa uporabnika ali bi rad vnesel EMSO z VoiceCommand ali s SystemKeyboard
 
 				// izklopimo interakcijo z atomi
 				trenutnoVpisujemoEmso = true;
-			} else
-				throw new System.Exception("No atom chosen."); // TODO PREVERI, DA SE TO NE MORA ZGODIT
+			}
 		}
 	}
 
 	// Teh metod ne bomo potrebovali, vseeno pa morajo biti implementirane
 	void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
 	void IMixedRealityPointerHandler.OnPointerDragged(MixedRealityPointerEventData eventData) { }
+
+
+	public void ResetirajSkripto() {
+		izbraniAtom = null;
+		trenutnoVpisujemoEmso = false;
+	}
 
 }

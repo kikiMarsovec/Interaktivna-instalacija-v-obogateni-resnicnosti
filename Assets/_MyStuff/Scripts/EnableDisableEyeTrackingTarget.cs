@@ -17,7 +17,6 @@ public class EnableDisableEyeTrackingTarget : MonoBehaviour, IMixedRealityFocusH
 		// Ko je EyeTrackingTarget vklopljen, ne moremo interaktirati z atomom.
 		// ko je atom v fokusu preverimo, kaj je sprozilo fokus. Ce je fokus sprozil HandPointer, potem izklopimo EyeTrackingTarget.
 		if (eventData.Pointer.InputSourceParent.SourceType == InputSourceType.Hand) {
-			Debug.Log("Focus Enter");
 			eyeTrackingTarget.enabled = false;
 			toolTipPrikazovanje.HideToolTipWithDelay();
 		}
@@ -25,7 +24,6 @@ public class EnableDisableEyeTrackingTarget : MonoBehaviour, IMixedRealityFocusH
 
 	public void OnFocusExit(FocusEventData eventData) {
 		// Ko atom izgubi fokus, vklopimo EyeTrackingTarget nazaj.
-		Debug.Log("Focus Exit");
 		eyeTrackingTarget.enabled = true;
 	}
 }

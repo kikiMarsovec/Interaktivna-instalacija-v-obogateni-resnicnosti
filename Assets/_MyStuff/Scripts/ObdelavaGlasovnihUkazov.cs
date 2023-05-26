@@ -2,7 +2,6 @@ using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.Utilities;
 
 public class ObdelavaGlasovnihUkazov : MonoBehaviour {
@@ -30,6 +29,8 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private AtomiUpdate atomiUpdate;
 	
 	private void OnEnable() {
+		Debug.Log("ENABLING ObdelavaGlasovnihUkazov");
+
 		atomiUpdate = atomi.GetComponent<AtomiUpdate>();
 
 		// shranimo komponenti ToolTipPrikazovanje in AtomPodatki  atoma, saj bomo do njih  pogosto dostopali
@@ -78,22 +79,22 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		}
 	}
 
-	private void DialogClose(DialogResult obj) {
+	private void DialogClose(DialogResult obj) { // koncamo vpisovanje EMSA
 		if (obj.Result == DialogButtonType.Yes) {
 			// Shranimo emso v izbrani  atom in posodobimo ToolTip
 			atomPodatki.emso = emso;
 			atomPodatki.UpdateToolTipText(emso);
 			toolTipPrikazovanje.VsiliToolTipShow(false); // izklopimo toolTip override
 
-			this.enabled = false; // izklopimo to skripto
-
-			// TODO aplikacija se mora nekako resetirati, da lahko potem  nov uporabnik  zacne od   zacetka (vseeno  pa moramo ohraniti prej  nastavljeno pozicijo, rotacijo in velikost tunela, da ne rabi se zopet nastavljat)
-			// TODO mogoce bi SaveAtomData in vse ostale stvari  lahko   dal v posebno funkcijo, da ne bo zmesnjava
+			vpisujemoZVoiceCommand = false;
 			atomi.GetComponent<SaveLoadAtoms>().SaveAtomData();
-			
-		} else if (obj.Result == DialogButtonType.No) {
-			// Nastavimo emso nazaj na prazen string in vprasamo uporabnika ali zeli poskusiti ponovno z voiceCommand, ali zeli poskusiti s SystemKeyboard
+			// TODO tukaj klicemo ResetiranjeAplikacije !!!
 			emso = "";
+			gameObject.SetActive(false); // izklopimo ta gameObject
+
+		} else if (obj.Result == DialogButtonType.No) {
+			emso = "";
+			// vprasamo uporabnika ali zeli poskusiti ponovno z voiceCommand, ali zeli poskusiti s SystemKeyboard
 			vpisujemoZVoiceCommand = false;
 			PrikaziDialogZNavodili();
 		}
@@ -102,7 +103,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	public void PrikaziDialogZNavodili() {
 		// prikazemo NearMenu, kjer uporabnik izbira ali bo vpisal EMSO z glasovnimi ukazi ali s tipkovnico
 		voiceOrKeyboardNearMenu.SetActive(true);
-		voiceOrKeyboardNearMenu.transform.position = CameraCache.Main.transform.position + new Vector3(0f,0f,0.5f);
+		voiceOrKeyboardNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
 	}
 
 	public void VklopiVoiceCommand() {
@@ -122,7 +123,6 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 			navodilaDialog.OnClosed += EndKeyboard;
 		}
 		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
-		// atomiUpdate.OdpriTipkovnicoZaEmso();
 	}
 
 	private void EndKeyboard(DialogResult obj) {
@@ -142,7 +142,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	void Update() {
 
 		// TODO DELETE FROM HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
-		/*
+		
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
 			SaveNumber(Random.Range(0, 10));
 		} else if (Input.GetKeyDown(KeyCode.Alpha2)) {
@@ -150,7 +150,6 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		} else if (Input.GetKeyDown(KeyCode.Alpha3)) {
 			EndSpeech();
 		}
-		*/
 		// TODO DELETE TO HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
 
 		if (tipkovnica != null) {
