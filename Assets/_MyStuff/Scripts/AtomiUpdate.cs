@@ -29,6 +29,14 @@ public class AtomiUpdate : MonoBehaviour {
 	[SerializeField]
 	private GameObject dialogSmallPrefab;
 
+	private void OnEnable() {
+		Debug.Log("AtomiUpdate Enabled"); // TODO DELETE
+	}
+
+	private void OnDisable() {
+		Debug.Log("AtomiUpdate Disabled"); // TODO DELETE
+	}
+
 	public void nastaviZaklenjenostRotacijeZ(bool zakleni) {
 		zakleniRotacijoZ=zakleni;
 	}
@@ -90,6 +98,7 @@ public class AtomiUpdate : MonoBehaviour {
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
 			gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+			vpisujemoPin = false;
 		}
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
 
@@ -107,11 +116,11 @@ public class AtomiUpdate : MonoBehaviour {
 						// uporabnik ni vnesel pravilen PIN
 						// odpremo dialog in sporocimo uporabniku, da pin ni pravilen
 						Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "PIN incorrect", "The PIN code you have entered is incorrect.", true);
+						this.enabled = false;
 					}
 					// izklopimo to skripto
 					tipkovnica.active = false;
 					vpisujemoPin = false;
-					this.enabled = false;
 				}
 			}
 		}

@@ -29,7 +29,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private AtomiUpdate atomiUpdate;
 	
 	private void OnEnable() {
-		Debug.Log("ENABLING ObdelavaGlasovnihUkazov");
+		Debug.Log("ENABLING ObdelavaGlasovnihUkazov"); // TODO DELETE
 
 		atomiUpdate = atomi.GetComponent<AtomiUpdate>();
 

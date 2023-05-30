@@ -17,17 +17,26 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	public Vector3 toolTipPozicija = new Vector3(0f,1f,0f);
 	public Vector3 toolTipBackgroundVelikost = new Vector3(0.125f,0.023f,1f);
 
+	private bool prvicPrikazujemo = true; // TESTIRAMO
+
 	public void ShowToolTip() {
 		if (showToolTipNoMatterWhat)
 			return;
+
+		if (prvicPrikazujemo) { // TESTIRAMO
+			prvicPrikazujemo = false;
+			Invoke("ReShowToolTip", 0.1f);
+		}
+
 		// nastavimo velikost in  pozicijo tooltip-a in velikost TipBackground-a
 		float velikostNanocevke = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.localScale.x;
 		toolTip.transform.GetChild(1).transform.localScale = toolTipVelikost;
 		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + toolTipPozicija * velikostNanocevke;
 		toolTip.transform.GetChild(1).transform.GetChild(0).transform.GetChild(1).transform.localScale = toolTipBackgroundVelikost;
-		// prikazemo toolTip
+																																																																																						   // prikazemo toolTip
 		gledamoVTooltip = true;
 		toolTip.SetActive(true);
+
 	}
 
 	public void HideToolTipWithDelay() {
@@ -48,6 +57,11 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	// s to metodo preprecimo, da EyeGaze vpliva  na prikazovanje in skrivanje ToolTip-a. S spremenljivko show povemo ali zelimo ToolTip prikazati  ali skriti
 	public void VsiliToolTipShow(bool show) {
 		if (show) {
+			if (prvicPrikazujemo) { // TESTIRAMO
+				prvicPrikazujemo = false;
+				Invoke("ReShowToolTip", 0.1f);
+			}
+
 			// nastavimo velikost in  pozicijo tooltip-a in velikost TipBackground-a
 			float velikostNanocevke = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.localScale.x;
 			toolTip.transform.GetChild(1).transform.localScale = toolTipVelikost;
@@ -60,6 +74,16 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 			showToolTipNoMatterWhat = false;
 			toolTip.SetActive(false);
 		}
+	}
+
+	private void ReShowToolTip() {
+		// nastavimo velikost in  pozicijo tooltip-a in velikost TipBackground-a
+		float velikostNanocevke = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.localScale.x;
+		toolTip.transform.GetChild(1).transform.localScale = toolTipVelikost;
+		toolTip.transform.GetChild(1).transform.position = gameObject.transform.position + toolTipPozicija * velikostNanocevke;
+		toolTip.transform.GetChild(1).transform.GetChild(0).transform.GetChild(1).transform.localScale = toolTipBackgroundVelikost;
+		// prikazemo toolTip
+		toolTip.SetActive(true);
 	}
 
 
