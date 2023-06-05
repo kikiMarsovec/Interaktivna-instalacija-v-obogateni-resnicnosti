@@ -176,5 +176,4 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		izbraniAtom = null;
 		trenutnoVpisujemoEmso = false;
 	}
-
 }

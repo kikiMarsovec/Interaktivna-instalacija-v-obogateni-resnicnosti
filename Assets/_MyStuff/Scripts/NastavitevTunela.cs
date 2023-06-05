@@ -39,7 +39,7 @@ public class NastavitevTunela : MonoBehaviour {
 		tunelVNastavljanju = true;
 
 		// ustvari se nov dialog
-		Dialog nastavljanjeTunelaDialog = Dialog.Open(dialogPrefab, DialogButtonType.Confirm | DialogButtonType.Cancel, "Nastavljanje tunela", "Nastavite tunel na željeno pozicijo, rotacijo in velikost in potrdite.", true);
+		Dialog nastavljanjeTunelaDialog = Dialog.Open(dialogPrefab, DialogButtonType.Confirm | DialogButtonType.Cancel, "Setting up tunnel", "Set up the nanotube to your desired position, rotation and size and press Confirm.", true);
 
 		// vklopimo komponente: box collider, object manipulator in near interaction grabbable (ce je slucajno cevka ze nastavljena v tunel)
 		GetComponent<BoxCollider>().enabled = true;
@@ -90,7 +90,7 @@ public class NastavitevTunela : MonoBehaviour {
 
 		// Klicemo funkcioj, ki zacne premikati cevko v Update funkciji
 		atomiUpdate.enabled = true;
-		atomiUpdate.zacniAnimacijoCevke(tunelPozicija, tunelRotacija, tunelVelikost);
+		atomiUpdate.zacniAnimacijoCevke(tunelPozicija, tunelRotacija, tunelVelikost, false);
 	}
 
 	public void ResetirajSkripto() {

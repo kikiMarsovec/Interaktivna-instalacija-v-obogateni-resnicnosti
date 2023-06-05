@@ -17,13 +17,14 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	public Vector3 toolTipPozicija = new Vector3(0f,1f,0f);
 	public Vector3 toolTipBackgroundVelikost = new Vector3(0.125f,0.023f,1f);
 
-	private bool prvicPrikazujemo = true; // TESTIRAMO
+	private bool prvicPrikazujemo = true; 
 
 	public void ShowToolTip() {
 		if (showToolTipNoMatterWhat)
 			return;
 
-		if (prvicPrikazujemo) { // TESTIRAMO
+		// ko prvic prikazujemo ToolTip,  ne  nastavi pravilne velikosti, zato  se enkrat (z zamikom) klicemo  funkcijo, ki prikaze toolTip
+		if (prvicPrikazujemo) { 
 			prvicPrikazujemo = false;
 			Invoke("ReShowToolTip", 0.1f);
 		}
@@ -57,7 +58,8 @@ public class ToolTipPrikazovanje : MonoBehaviour {
 	// s to metodo preprecimo, da EyeGaze vpliva  na prikazovanje in skrivanje ToolTip-a. S spremenljivko show povemo ali zelimo ToolTip prikazati  ali skriti
 	public void VsiliToolTipShow(bool show) {
 		if (show) {
-			if (prvicPrikazujemo) { // TESTIRAMO
+			// ko prvic prikazujemo ToolTip,  ne  nastavi pravilne velikosti, zato  se enkrat (z zamikom) klicemo  funkcijo, ki prikaze toolTip
+			if (prvicPrikazujemo) { 
 				prvicPrikazujemo = false;
 				Invoke("ReShowToolTip", 0.1f);
 			}

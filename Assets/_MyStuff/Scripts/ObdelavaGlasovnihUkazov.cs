@@ -29,8 +29,6 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private AtomiUpdate atomiUpdate;
 	
 	private void OnEnable() {
-		Debug.Log("ENABLING ObdelavaGlasovnihUkazov"); // TODO DELETE
-
 		atomiUpdate = atomi.GetComponent<AtomiUpdate>();
 
 		// shranimo komponenti ToolTipPrikazovanje in AtomPodatki  atoma, saj bomo do njih  pogosto dostopali
@@ -88,7 +86,10 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 
 			vpisujemoZVoiceCommand = false;
 			atomi.GetComponent<SaveLoadAtoms>().SaveAtomData();
-			// TODO tukaj klicemo ResetiranjeAplikacije !!!
+
+			// Uporabnik je uspesno vpisal svoj EMSO. Resetiramo aplikacijo, da bo na voljo za novega uporabnika.
+			atomi.GetComponent<ResetiranjeAplikacije>().KoncajSprehod();
+
 			emso = "";
 			gameObject.SetActive(false); // izklopimo ta gameObject
 
@@ -122,7 +123,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		if (navodilaDialog != null) {
 			navodilaDialog.OnClosed += EndKeyboard;
 		}
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);  // TODO for some reason mi tuki ne da NumberPad ampak cel keyboard WHAT THE FUCKING SHIT (HOLOLENS JE SHIT)
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false); 
 	}
 
 	private void EndKeyboard(DialogResult obj) {

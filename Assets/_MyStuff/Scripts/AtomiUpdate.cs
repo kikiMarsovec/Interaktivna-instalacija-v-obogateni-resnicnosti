@@ -25,27 +25,21 @@ public class AtomiUpdate : MonoBehaviour {
 	private Vector3 trenutnaHitrostTranslacije = Vector3.zero;
 	private Vector3 trenutnaHitrostSkaliranja = Vector3.zero;
 	private float casRotacije = 0.0f;
+	private bool hideAtTheEnd = false;
 
 	[SerializeField]
 	private GameObject dialogSmallPrefab;
-
-	private void OnEnable() {
-		Debug.Log("AtomiUpdate Enabled"); // TODO DELETE
-	}
-
-	private void OnDisable() {
-		Debug.Log("AtomiUpdate Disabled"); // TODO DELETE
-	}
 
 	public void nastaviZaklenjenostRotacijeZ(bool zakleni) {
 		zakleniRotacijoZ=zakleni;
 	}
 
-	public void zacniAnimacijoCevke(Vector3 ciljnaPozcijia, Quaternion ciljnaRotacija, Vector3 ciljnaVelikost) {
+	public void zacniAnimacijoCevke(Vector3 ciljnaPozcijia, Quaternion ciljnaRotacija, Vector3 ciljnaVelikost, bool hide) {
 		tunelPozicija = ciljnaPozcijia;
 		tunelRotacija = ciljnaRotacija;
 		tunelVelikost = ciljnaVelikost;
 		premakniVTunel = true;
+		hideAtTheEnd = hide;
 
 		// zaradi premikanja cevke izklopimo dolocene atome za optimizacijo
 		gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
@@ -137,6 +131,11 @@ public class AtomiUpdate : MonoBehaviour {
 				casRotacije = 0;
 				// vklopimo nazaj izklopljene atome
 				gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
+
+				// po potrebi skrijemo nanocevko
+				if (hideAtTheEnd)
+					gameObject.SetActive(false);
+
 				// izklopimo AtomiUpdate.cs, ker ga ne potrebujemo vec
 				this.enabled = false;
 			}

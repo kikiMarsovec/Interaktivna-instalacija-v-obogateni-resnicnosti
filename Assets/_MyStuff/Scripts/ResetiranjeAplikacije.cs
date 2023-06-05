@@ -1,11 +1,47 @@
 using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResetiranjeAplikacije : MonoBehaviour
-{
-    public void ResetirajAplikacijo() {
+public class ResetiranjeAplikacije : MonoBehaviour {
+
+	[SerializeField]
+	private GameObject dialogSmallPrefab;
+
+	[SerializeField]
+	private GameObject resetAppNearMenu;
+
+	public void KoncajSprehod() {
+		// prikazemo uporabniku dialog, ki ga obvesti, da je sprehod koncan.
+		Dialog endWalkDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "Thank you for using the app", "The walk among atoms is now finished. Please press Close and pass the HoloLens to the next person.", true);
+		if (endWalkDialog != null) {
+			endWalkDialog.OnClosed += DialogClose;
+		}
+	}
+
+	private void DialogClose(DialogResult obj) { 
+		if (obj.Result == DialogButtonType.Close) {
+			// prikazemo gumb za resetiranje aplikacije
+			resetAppNearMenu.SetActive(true);
+			resetAppNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
+			// skrijemo nanocevko
+			gameObject.transform.localScale = Vector3.zero;
+			gameObject.SetActive(false);
+		}
+	}
+
+	public void ResetirajAplikacijo() {
+		gameObject.SetActive(true);
+		// izklopimo near menu za resetiranje aplikacije
+		resetAppNearMenu.SetActive(false);
+		// zopet prikazemo nanocevko (z animacijo)
+		Vector3 ciljnaPozicija = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 1.5f;
+		Quaternion ciljnaRotacija = transform.rotation;
+		Vector3 ciljnaVelikost = Vector3.one *  0.5f;
+		gameObject.GetComponent<AtomiUpdate>().enabled = true;
+		gameObject.GetComponent<AtomiUpdate>().zacniAnimacijoCevke(ciljnaPozicija, ciljnaRotacija, ciljnaVelikost, false);
 		// gremo cez vse atome in izklopimo EnableDisableEyeTrackingTarget, nato EyeTrackingTarget in resetiramo ToolTipPrikazovanje
 		GameObject atomi = gameObject.transform.GetChild(0).gameObject;
 		for (int i = 0; i < atomi.transform.childCount; i++) {
