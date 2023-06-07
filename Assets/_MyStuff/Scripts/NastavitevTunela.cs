@@ -1,5 +1,6 @@
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class NastavitevTunela : MonoBehaviour {
 
 	// ce veckrat pritisnemo na gumb za nastavljanje tunela, moramo dobiti samo en Dialog
 	private bool tunelVNastavljanju = false;
+
+	// nastavimo na true, ko uporabnik vstopi v tunel
+	private bool smoVTunelu = false;
 
     [SerializeField]
 	[Tooltip("Dodaj DialogSmall_192x96 prefab")]
@@ -87,15 +91,31 @@ public class NastavitevTunela : MonoBehaviour {
 		GetComponent<ObjectManipulator>().enabled = false;
 		GetComponent<NearInteractionGrabbable>().enabled = false;
 
+		smoVTunelu = true;
 
 		// Klicemo funkcioj, ki zacne premikati cevko v Update funkciji
 		atomiUpdate.enabled = true;
 		atomiUpdate.zacniAnimacijoCevke(tunelPozicija, tunelRotacija, tunelVelikost, false);
 	}
 
+	public void BringNanotubeBack() {
+		if (smoVTunelu) {
+			// ce smo ze vstopili  v tunel, ne smemo premikati nanocevke
+			return;
+		}
+		// aktiviramo s klikom na gumb v meniju
+		// ce se nanocevka izgubi nekje v  prostoru  (npr uporabnik jo po pomoti da za kaksno steno in jo ne more doseci) jo z  animacijo prikazemo pred uporabnikom
+		Vector3 ciljnaPozicija = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 1.5f;
+		Quaternion ciljnaRotacija = transform.rotation;
+		Vector3 ciljnaVelikost = Vector3.one * 0.5f;
+		gameObject.GetComponent<AtomiUpdate>().enabled = true;
+		gameObject.GetComponent<AtomiUpdate>().zacniAnimacijoCevke(ciljnaPozicija, ciljnaRotacija, ciljnaVelikost, false);
+	}
+
 	public void ResetirajSkripto() {
 		GetComponent<BoxCollider>().enabled = true;
 		GetComponent<ObjectManipulator>().enabled = true;
 		GetComponent<NearInteractionGrabbable>().enabled = true;
+		smoVTunelu = false;
 	}
 }

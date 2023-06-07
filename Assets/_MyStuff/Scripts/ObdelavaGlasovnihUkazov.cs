@@ -131,6 +131,7 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		if (obj.Result == DialogButtonType.Confirm) {
 			emso = tipkovnicaTekst;
 			tipkovnica.active = false;
+			tipkovnica = null;
 			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?", "UserID: " + emso, true);
 			if (endSpeechDialog != null) {
 				endSpeechDialog.OnClosed += DialogClose;
