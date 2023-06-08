@@ -65,7 +65,7 @@ public class AtomiUpdate : MonoBehaviour {
 	// System Keyboard
 	public TouchScreenKeyboard tipkovnica;
 
-	private bool vpisujemoPin = false;
+	public bool vpisujemoPin = false;
 	public void OdpriTipkovnicoZaPin() {
 		if (vpisujemoPin)
 			return;

@@ -99,8 +99,9 @@ public class NastavitevTunela : MonoBehaviour {
 	}
 
 	public void BringNanotubeBack() {
-		if (smoVTunelu) {
+		if (smoVTunelu || GetComponent<AtomiUpdate>().vpisujemoPin) {
 			// ce smo ze vstopili  v tunel, ne smemo premikati nanocevke
+			// ce vpisujemo pin, ne smemo aktivirati te funkcije (ker zapre skripto  AtomiUpdate)
 			return;
 		}
 		// aktiviramo s klikom na gumb v meniju
