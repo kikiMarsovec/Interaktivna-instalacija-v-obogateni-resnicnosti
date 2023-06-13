@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+using Microsoft.MixedReality.Toolkit.Experimental.UI;
+
 // V AtomiUpdate.cs sem prestavil Update funkcijo iz NastavitevTunela.cs (Za optimizacijo).
 // Skripto bom aktiviral le takrat, ko jo potrebujem, takoj zatem pa jo bom deaktiviral.
 
@@ -87,6 +89,8 @@ public class AtomiUpdate : MonoBehaviour {
 		}
 	}
 
+	private bool tipkovnicaAktivirana = false;
+
 	private void Update() {
 
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
@@ -96,7 +100,7 @@ public class AtomiUpdate : MonoBehaviour {
 		}
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
 
-
+		Debug.Log(tipkovnica); // TODO DELETE
 		if (tipkovnica != null) {
 			if (vpisujemoPin) {
 				if (tipkovnica.text.Length == 4) {
@@ -116,9 +120,25 @@ public class AtomiUpdate : MonoBehaviour {
 					tipkovnica.active = false;
 					vpisujemoPin = false;
 				}
+				if (tipkovnica.active) { // TODO SKONTAJ TO
+										 // TODO SKONTAJ TO
+										 // TODO SKONTAJ TO
+					tipkovnicaAktivirana = true;
+				}
 			}
-		} else if (vpisujemoPin && tipkovnica == null) {
-			// ce uporabnik sam zapre tipkovnico
+		} // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		  // TODO SKONTAJ TO
+		if ( (tipkovnicaAktivirana && tipkovnica == null) || (tipkovnicaAktivirana && tipkovnica.status == TouchScreenKeyboard.Status.Canceled ) || (tipkovnicaAktivirana && !tipkovnica.active) ) {
+			// uporabnik je sam zaprl tipkovnico
+			tipkovnicaAktivirana = false;
 			vpisujemoPin = false;
 			this.enabled = false;
 		}
