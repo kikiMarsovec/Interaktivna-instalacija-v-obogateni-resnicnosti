@@ -25,7 +25,7 @@ public class AtomiUpdate : MonoBehaviour {
 	private Vector3 trenutnaHitrostTranslacije = Vector3.zero;
 	private Vector3 trenutnaHitrostSkaliranja = Vector3.zero;
 	private float casRotacije = 0.0f;
-	private bool hideAtTheEnd = false;
+	private bool stayActivatedAtTheEnd = false;
 
 	[SerializeField]
 	private GameObject dialogSmallPrefab;
@@ -34,12 +34,12 @@ public class AtomiUpdate : MonoBehaviour {
 		zakleniRotacijoZ=zakleni;
 	}
 
-	public void zacniAnimacijoCevke(Vector3 ciljnaPozcijia, Quaternion ciljnaRotacija, Vector3 ciljnaVelikost, bool hide) {
+	public void zacniAnimacijoCevke(Vector3 ciljnaPozcijia, Quaternion ciljnaRotacija, Vector3 ciljnaVelikost, bool stayActivated) {
 		tunelPozicija = ciljnaPozcijia;
 		tunelRotacija = ciljnaRotacija;
 		tunelVelikost = ciljnaVelikost;
 		premakniVTunel = true;
-		hideAtTheEnd = hide;
+		stayActivatedAtTheEnd = stayActivated;
 
 		// zaradi premikanja cevke izklopimo dolocene atome za optimizacijo
 		gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(false);
@@ -117,6 +117,10 @@ public class AtomiUpdate : MonoBehaviour {
 					vpisujemoPin = false;
 				}
 			}
+		} else if (vpisujemoPin && tipkovnica == null) {
+			// ce uporabnik sam zapre tipkovnico
+			vpisujemoPin = false;
+			this.enabled = false;
 		}
 		if (zakleniRotacijoZ) {
 			transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
@@ -132,12 +136,9 @@ public class AtomiUpdate : MonoBehaviour {
 				// vklopimo nazaj izklopljene atome
 				gameObject.transform.GetChild(0).transform.Find("Hydrogen_mesh").gameObject.SetActive(true);
 
-				// po potrebi skrijemo nanocevko
-				if (hideAtTheEnd)
-					gameObject.SetActive(false);
-
-				// izklopimo AtomiUpdate.cs, ker ga ne potrebujemo vec
-				this.enabled = false;
+				// po potrebu izklopimo AtomiUpdate.cs
+				if (!stayActivatedAtTheEnd)
+					this.enabled = false;
 			}
 			else {
 				// cevko transliramo, skaliramo in rotiramo proti ciljni poziciji, velikosti in rotaciji

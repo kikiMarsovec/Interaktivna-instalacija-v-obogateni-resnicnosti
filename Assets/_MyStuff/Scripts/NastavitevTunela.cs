@@ -109,8 +109,9 @@ public class NastavitevTunela : MonoBehaviour {
 		Vector3 ciljnaPozicija = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 1.5f;
 		Quaternion ciljnaRotacija = transform.rotation;
 		Vector3 ciljnaVelikost = Vector3.one * 0.5f;
+		bool atomiUpdateStayActivated = gameObject.GetComponent<AtomiUpdate>().enabled; // ce je AtomiUpdate ze "enabled", ga ne ugasnemo na koncu
 		gameObject.GetComponent<AtomiUpdate>().enabled = true;
-		gameObject.GetComponent<AtomiUpdate>().zacniAnimacijoCevke(ciljnaPozicija, ciljnaRotacija, ciljnaVelikost, false);
+		gameObject.GetComponent<AtomiUpdate>().zacniAnimacijoCevke(ciljnaPozicija, ciljnaRotacija, ciljnaVelikost, atomiUpdateStayActivated);
 	}
 
 	public void ResetirajSkripto() {
