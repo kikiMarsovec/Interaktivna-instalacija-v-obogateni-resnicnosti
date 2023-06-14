@@ -91,6 +91,9 @@ public class AtomiUpdate : MonoBehaviour {
 
 	private bool tipkovnicaAktivirana = false;
 
+
+	private TouchScreenKeyboard.Status previousStatus; // TODO DELETE THIS (TESTING)
+
 	private void Update() {
 
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
@@ -100,7 +103,16 @@ public class AtomiUpdate : MonoBehaviour {
 		}
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
 
-		Debug.Log(tipkovnica); // TODO DELETE
+
+		//  TODO DELETE FROM  HERE (TESTING)
+		if (tipkovnica != null) {
+			if (previousStatus != tipkovnica.status) {
+				Dialog debugDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "DEBUG", "The status has changed from " + previousStatus.ToString() + " to " + tipkovnica.status.ToString() + ".", true);
+				previousStatus = tipkovnica.status;
+			}
+		}
+		// TODO DELETE  TO HERE
+
 		if (tipkovnica != null) {
 			if (vpisujemoPin) {
 				if (tipkovnica.text.Length == 4) {
