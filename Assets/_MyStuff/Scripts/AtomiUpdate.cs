@@ -92,26 +92,16 @@ public class AtomiUpdate : MonoBehaviour {
 	private bool tipkovnicaAktivirana = false;
 
 
-	private TouchScreenKeyboard.Status previousStatus; // TODO DELETE THIS (TESTING)
+	private TouchScreenKeyboard.Status previousStatus; // sledimo state tipkovnice (ce jo npr uporabnik zapre)
 
 	private void Update() {
 
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
-			vpisujemoPin = false;
-		}
+		// if (Input.GetKeyDown(KeyCode.Alpha1)) {
+		//	gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+		//	vpisujemoPin = false;
+		// }
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
-
-
-		//  TODO DELETE FROM  HERE (TESTING)
-		if (tipkovnica != null) {
-			if (previousStatus != tipkovnica.status) {
-				Dialog debugDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "DEBUG", "The status has changed from " + previousStatus.ToString() + " to " + tipkovnica.status.ToString() + ".", true);
-				previousStatus = tipkovnica.status;
-			}
-		}
-		// TODO DELETE  TO HERE
 
 		if (tipkovnica != null) {
 			if (vpisujemoPin) {
@@ -132,28 +122,17 @@ public class AtomiUpdate : MonoBehaviour {
 					tipkovnica.active = false;
 					vpisujemoPin = false;
 				}
-				if (tipkovnica.active) { // TODO SKONTAJ TO
-										 // TODO SKONTAJ TO
-										 // TODO SKONTAJ TO
-					tipkovnicaAktivirana = true;
+			}
+			if (previousStatus != tipkovnica.status) {
+				// preverimo, ce uporabnik sam zapre tipkovnico
+				previousStatus = tipkovnica.status;
+				if (previousStatus == TouchScreenKeyboard.Status.Done || previousStatus == TouchScreenKeyboard.Status.Canceled) {
+					tipkovnicaAktivirana = false;
+					vpisujemoPin = false;
+					this.enabled = false;
 				}
 			}
-		} // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		  // TODO SKONTAJ TO
-		if ( (tipkovnicaAktivirana && tipkovnica == null) || (tipkovnicaAktivirana && tipkovnica.status == TouchScreenKeyboard.Status.Canceled ) || (tipkovnicaAktivirana && !tipkovnica.active) ) {
-			// uporabnik je sam zaprl tipkovnico
-			tipkovnicaAktivirana = false;
-			vpisujemoPin = false;
-			this.enabled = false;
-		}
+		} 
 		if (zakleniRotacijoZ) {
 			transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
 		}
