@@ -89,10 +89,10 @@ public class AtomiUpdate : MonoBehaviour {
 		}
 	}
 
-	private bool tipkovnicaAktivirana = false;
 
 
 	private TouchScreenKeyboard.Status previousStatus; // sledimo state tipkovnice (ce jo npr uporabnik zapre)
+	private bool pinCorrect = false;
 
 	private void Update() {
 
@@ -111,14 +111,14 @@ public class AtomiUpdate : MonoBehaviour {
 
 						// uporabnik je vnesel pravilen PIN
 						// klicemo funkcijo za nastavljanje pin-a
+						pinCorrect = true;
 						gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
 					} else {
 						// uporabnik ni vnesel pravilen PIN
 						// odpremo dialog in sporocimo uporabniku, da pin ni pravilen
 						Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Close, "PIN incorrect", "The PIN code you have entered is incorrect.", true);
-						this.enabled = false;
 					}
-					// izklopimo to skripto
+					// izklopimo tipkovnico
 					tipkovnica.active = false;
 					vpisujemoPin = false;
 				}
@@ -126,10 +126,11 @@ public class AtomiUpdate : MonoBehaviour {
 			if (previousStatus != tipkovnica.status) {
 				// preverimo, ce uporabnik sam zapre tipkovnico
 				previousStatus = tipkovnica.status;
-				if (previousStatus == TouchScreenKeyboard.Status.Done || previousStatus == TouchScreenKeyboard.Status.Canceled) {
-					tipkovnicaAktivirana = false;
+				if (previousStatus == TouchScreenKeyboard.Status.Done) {
 					vpisujemoPin = false;
-					this.enabled = false;
+					if (!pinCorrect)
+						this.enabled = false;
+					pinCorrect = false;
 				}
 			}
 		} 

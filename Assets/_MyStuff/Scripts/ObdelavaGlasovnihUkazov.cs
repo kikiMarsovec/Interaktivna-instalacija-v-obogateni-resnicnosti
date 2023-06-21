@@ -119,27 +119,46 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	public void VklopiSystemKeyboard() {
 		voiceOrKeyboardNearMenu.SetActive(false);
 
-		Dialog navodilaDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Confirm, "Type your UserID", "Type your UserID via the System Keyboard. Once you are finished, press \"Confirm\".", true);
+		Dialog navodilaDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.OK, "Type your UserID", "Type your UserID via the System Keyboard. Once you are finished, press the \"X\" symbol on the top right corner of the keyboard.", true);
 		if (navodilaDialog != null) {
-			navodilaDialog.OnClosed += EndKeyboard;
+			navodilaDialog.OnClosed += OpenKeyboard;
 		}
-		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false); 
 	}
 
-	private void EndKeyboard(DialogResult obj) {
-		// TODO PREVERIT MORMO, ALI JE EMSO LENGTH > 1, SICER MORAMO SE ENKRAT KLICAT FUNKCIJO "VklopiSystemKeyboard" IN SPOROCIT UPORABNIKU, DA MORA EMSO BIT VSAJ 1 CHAR DOLG (JEBISE)
-		if (obj.Result == DialogButtonType.Confirm) {
-			emso = tipkovnicaTekst;
+	private void OpenKeyboard(DialogResult obj) {
+		tipkovnica = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, true, false);
+	}
+
+	private void EndKeyboard() {
+		if (tipkovnicaTekst.Length < 1) {
+			// uporabnik je vnesel prazen EMSO
+			// prikazemo mu dialog in se enkrat lahko izbira kako bo vnesel svoj EMSO
+			Dialog prazenEmsoDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.OK, "You have entered an empty UserID", "Please try again. If you prefer, you can choose to enter your UserID via Voice Command.", true);
+			if (prazenEmsoDialog != null) {
+				prazenEmsoDialog.OnClosed += PonovnoPrikaziDialogZNavodili;
+			}
 			tipkovnica.active = false;
 			tipkovnica = null;
-			Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?", "UserID: " + emso, true);
-			if (endSpeechDialog != null) {
-				endSpeechDialog.OnClosed += DialogClose;
-			}
+			return;
 		}
+		
+		emso = tipkovnicaTekst;
+		tipkovnica.active = false;
+		tipkovnica = null;
+		Dialog endSpeechDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Is this your ID?", "UserID: " + emso, true);
+		if (endSpeechDialog != null) {
+			endSpeechDialog.OnClosed += DialogClose;
+		}
+	}
+
+	private void PonovnoPrikaziDialogZNavodili(DialogResult obj) {
+		emso = "";
+		vpisujemoZVoiceCommand = false;
+		PrikaziDialogZNavodili();
 	}
 
 	private string tipkovnicaTekst;
+	private TouchScreenKeyboard.Status previousStatus;
 
 	void Update() {
 
@@ -160,6 +179,13 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 				atomPodatki.UpdateToolTipText("UserID:");
 			} else {
 				atomPodatki.UpdateToolTipText(tipkovnicaTekst);
+			}
+			if (previousStatus != tipkovnica.status) {
+				previousStatus = tipkovnica.status;
+				if (previousStatus == TouchScreenKeyboard.Status.Done) {
+					// uporabnik je zaprl tipkovnico
+					EndKeyboard();
+				}
 			}
 		}
 	}
