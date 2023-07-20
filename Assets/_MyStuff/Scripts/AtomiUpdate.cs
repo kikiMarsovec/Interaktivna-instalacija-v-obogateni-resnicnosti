@@ -28,6 +28,7 @@ public class AtomiUpdate : MonoBehaviour {
 	private Vector3 trenutnaHitrostSkaliranja = Vector3.zero;
 	private float casRotacije = 0.0f;
 	private bool stayActivatedAtTheEnd = false;
+	private Quaternion zacetnaRotacija;
 
 	[SerializeField]
 	private GameObject dialogSmallPrefab;
@@ -40,6 +41,7 @@ public class AtomiUpdate : MonoBehaviour {
 		tunelPozicija = ciljnaPozcijia;
 		tunelRotacija = ciljnaRotacija;
 		tunelVelikost = ciljnaVelikost;
+		zacetnaRotacija = transform.rotation;
 		premakniVTunel = true;
 		stayActivatedAtTheEnd = stayActivated;
 
@@ -97,10 +99,10 @@ public class AtomiUpdate : MonoBehaviour {
 	private void Update() {
 
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
-		// if (Input.GetKeyDown(KeyCode.Alpha1)) {
-		//	gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
-		//	vpisujemoPin = false;
-		// }
+		if (Input.GetKeyDown(KeyCode.Alpha1)) {
+			gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+			vpisujemoPin = false;
+		}
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
 
 		if (tipkovnica != null) {
@@ -138,7 +140,7 @@ public class AtomiUpdate : MonoBehaviour {
 			transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
 		}
 		if (premakniVTunel) {
-			// preverimo ali je cevka priblizno na pravi poziciji, velikosti in rotaciji
+			// preverimo ali je cevka (priblizno) na pravi poziciji, velikosti in rotaciji
 			if (Vector3.Distance(transform.position, tunelPozicija) < 0.1f && Quaternion.Angle(transform.rotation, tunelRotacija) < 1 && Vector3.Distance(transform.localScale, tunelVelikost) < 0.1f) {
 				// ko cevka doseze pravilno pozicijo, velikost in rotacijo, prenehamo
 				premakniVTunel = false;
@@ -156,8 +158,8 @@ public class AtomiUpdate : MonoBehaviour {
 				// cevko transliramo, skaliramo in rotiramo proti ciljni poziciji, velikosti in rotaciji
 				transform.position = Vector3.SmoothDamp(transform.position, tunelPozicija, ref trenutnaHitrostTranslacije, 1f);
 				transform.localScale = Vector3.SmoothDamp(transform.localScale, tunelVelikost, ref trenutnaHitrostSkaliranja, 1f);
-				transform.rotation = Quaternion.Slerp(transform.rotation, tunelRotacija, casRotacije);
-				casRotacije += Time.deltaTime * 0.1f;
+				transform.rotation = Quaternion.Slerp(zacetnaRotacija, tunelRotacija, casRotacije);
+				casRotacije += Time.deltaTime * 0.6f;
 			}
 		}
 	}

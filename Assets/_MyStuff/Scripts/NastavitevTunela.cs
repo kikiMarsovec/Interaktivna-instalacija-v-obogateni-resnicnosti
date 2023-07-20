@@ -43,7 +43,7 @@ public class NastavitevTunela : MonoBehaviour {
 		tunelVNastavljanju = true;
 
 		// ustvari se nov dialog
-		Dialog nastavljanjeTunelaDialog = Dialog.Open(dialogPrefab, DialogButtonType.Confirm | DialogButtonType.Cancel, "Setting up tunnel", "Set up the nanotube to your desired position, rotation and size and press Confirm.", true);
+		Dialog nastavljanjeTunelaDialog = Dialog.Open(dialogPrefab, DialogButtonType.Confirm | DialogButtonType.Cancel, "Setting up tunnel", "Set up the G-wire to your desired position, rotation and size and press Confirm.", true);
 
 		// vklopimo komponente: box collider, object manipulator in near interaction grabbable (ce je slucajno cevka ze nastavljena v tunel)
 		GetComponent<BoxCollider>().enabled = true;

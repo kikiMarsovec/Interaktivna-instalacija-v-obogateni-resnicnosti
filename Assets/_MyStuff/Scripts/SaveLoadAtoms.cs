@@ -36,7 +36,6 @@ public class SaveLoadAtoms : MonoBehaviour {
 		path = Application.persistentDataPath + "/atom_data.json";
 	}
 
-	// TODO zakaj tukaj tabimo dodati [SerializeField] ???
 	[SerializeField] private SerializableList<string> atomDataList; //ustvarimo nov seznam, kamor bomo shranjevali atribute atomov (emso)
 	public void SaveAtomData() {
 		// gremo cez vse atome in dodamo njihov emso v seznam
