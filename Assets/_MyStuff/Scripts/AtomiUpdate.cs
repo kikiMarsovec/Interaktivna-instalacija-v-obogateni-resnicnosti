@@ -74,7 +74,7 @@ public class AtomiUpdate : MonoBehaviour {
 		if (vpisujemoPin)
 			return;
 		vpisujemoPin = true;
-		Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Setting up tunnel", "Setting up tunnel requires admin rights. Do you want to continue? After pressing Yes, you will be prompted to enter a PIN code.", true);
+		Dialog pinDialog = Dialog.Open(dialogSmallPrefab, DialogButtonType.Yes | DialogButtonType.No, "Setting up tunnel", "Setting up tunnel requires admin rights. Would you like to proceed? If you select Yes, you'll be asked to enter a PIN code.", true);
 		if (pinDialog != null) {
 			pinDialog.OnClosed += DialogClose;
 		}
