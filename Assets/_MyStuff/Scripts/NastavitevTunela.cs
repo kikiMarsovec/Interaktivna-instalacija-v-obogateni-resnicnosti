@@ -27,6 +27,13 @@ public class NastavitevTunela : MonoBehaviour {
     [SerializeField]
 	[Tooltip("Dodaj DialogSmall_192x96 prefab")]
 	private GameObject dialogPrefab;
+	
+	[SerializeField]
+	[Tooltip("Dodaj DialogLarge prefab")]
+	private GameObject dialogLargePrefab;
+
+	[SerializeField]
+	private GameObject gumbBringGWireBack;
 
 	private void Start() {
 		atomiUpdate = GetComponent<AtomiUpdate>();
@@ -37,7 +44,7 @@ public class NastavitevTunela : MonoBehaviour {
 	public void NastaviTunel() {
 		// Ce je tunel ze v nastavljanju, ne odpremo novega Dialog-a
 		if (tunelVNastavljanju) {
-			Debug.Log("ERROR: Tunel je ze v nastavljanju."); //  TODO
+			// Debug.Log("ERROR: Tunel je ze v nastavljanju.");
 			return;
 		}
 		tunelVNastavljanju = true;
@@ -77,13 +84,13 @@ public class NastavitevTunela : MonoBehaviour {
 		if (!tunelNastavljen) {
 			// ce tunel se nima nastavljene ciljne pozicije, rotacije in velikosti ter kliknemo gumb za vstop, se pojavi ERROR
 			// TODO prikazi error uporabniku
-			Debug.Log("ERROR: Prej je treba nastaviti tunel");
+			// Debug.Log("ERROR: Prej je treba nastaviti tunel");
 			return;
 		}
 		if (tunelVNastavljanju) {
 			// ce je tunel ze bil predhodno nastavljen in ga zopet nastavljamo ter kliknemo gumb za vstop, se pojavi  ERROR
 			// TODO prikazi error uporabniku
-			Debug.Log("ERROR: Dokler nastavljate tunel, vanj ni mogoce vstopiti.");
+			// Debug.Log("ERROR: Dokler nastavljate tunel, vanj ni mogoce vstopiti.");
 			return;
 		}
 		// izklopimo komponente: box collider, object manipulator in near interaction grabbable
@@ -92,6 +99,7 @@ public class NastavitevTunela : MonoBehaviour {
 		GetComponent<NearInteractionGrabbable>().enabled = false;
 
 		smoVTunelu = true;
+		gumbBringGWireBack.GetComponent<ButtonConfigHelper>().MainLabelText = "Exit tunnel";
 
 		// Klicemo funkcioj, ki zacne premikati cevko v Update funkciji
 		atomiUpdate.enabled = true;
@@ -99,8 +107,12 @@ public class NastavitevTunela : MonoBehaviour {
 	}
 
 	public void BringNanotubeBack() {
-		if (smoVTunelu || GetComponent<AtomiUpdate>().vpisujemoPin) {
-			// ce smo ze vstopili  v tunel, ne smemo premikati nanocevke
+		if (smoVTunelu) {
+			// izstopimo iz tunela tako, da resetiramo aplikacijo
+			GetComponent<ResetiranjeAplikacije>().ResetirajAplikacijo();
+			return;
+		}
+		else if (GetComponent<AtomiUpdate>().vpisujemoPin) {
 			// ce vpisujemo pin, ne smemo aktivirati te funkcije (ker zapre skripto  AtomiUpdate)
 			return;
 		}
@@ -114,10 +126,29 @@ public class NastavitevTunela : MonoBehaviour {
 		gameObject.GetComponent<AtomiUpdate>().zacniAnimacijoCevke(ciljnaPozicija, ciljnaRotacija, ciljnaVelikost, atomiUpdateStayActivated);
 	}
 
+	private bool dialogInformacijePrikazan = false;
+	public void PrikaziInformacije() {
+		// ce je ze prikazan dialog, ga ne prikazemo se enkrat
+		if (dialogInformacijePrikazan)
+			return;
+
+		dialogInformacijePrikazan = true;
+		Dialog informacijeDialog = Dialog.Open(dialogLargePrefab, DialogButtonType.Close, "Information", "TODO information text.", true);
+		if (informacijeDialog != null) {
+			informacijeDialog.OnClosed += InfoDialogClosed;
+		}
+	}
+
+	private void InfoDialogClosed(DialogResult obj) {
+		if (obj.Result == DialogButtonType.Close)
+			dialogInformacijePrikazan = false;
+	}
+
 	public void ResetirajSkripto() {
 		GetComponent<BoxCollider>().enabled = true;
 		GetComponent<ObjectManipulator>().enabled = true;
 		GetComponent<NearInteractionGrabbable>().enabled = true;
 		smoVTunelu = false;
+		gumbBringGWireBack.GetComponent<ButtonConfigHelper>().MainLabelText = "Bring G-wire back";
 	}
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 // Unity ne more serializirati seznamov. Na tak nacin generiramo seznam, katerega lahko serializira.
-// TAKEN FROM: https://answers.unity.com/questions/1361721/converting-a-generic-list-to-json-in-unity.html
+// IDEA INSPIRED BY (user c8theino): https://answers.unity.com/questions/1361721/converting-a-generic-list-to-json-in-unity.html
 [System.Serializable]
 public class SerializableList<T> {
 	public List<T> list;
@@ -61,13 +61,9 @@ public class SaveLoadAtoms : MonoBehaviour {
 				foreach (Transform child in group) {
 					child.GetChild(0).GetComponent<AtomPodatki>().emso = atomDataList.First();
 
-					// TODO DELETE FROM HERE
-
 					// atome, ki  imajo emso pobarvamo na rumeno, zaradi lazjega testiranja
-					if (atomDataList.First().Length > 0)
-						child.GetChild(0).GetComponent<Renderer>().material.color = Color.yellow; // DELETE
-
-					// TODO DELETE TO HERE
+					// if (atomDataList.First().Length > 0)
+					//	child.GetChild(0).GetComponent<Renderer>().material.color = Color.yellow; // DELETE
 
 					atomDataList.RemoveFirst();
 				}

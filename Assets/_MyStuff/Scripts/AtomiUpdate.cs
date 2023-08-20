@@ -99,18 +99,16 @@ public class AtomiUpdate : MonoBehaviour {
 	private void Update() {
 
 		// TODO  DELETE FROM HERE (This is only for testing in  Unity Editor)
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
-			vpisujemoPin = false;
-		}
+		// if (Input.GetKeyDown(KeyCode.Alpha1)) {
+		//	gameObject.GetComponent<NastavitevTunela>().NastaviTunel();
+		//	vpisujemoPin = false;
+		// }
 		// DELETE  TO HERE (This is only for testing in  Unity Editor)
 
 		if (tipkovnica != null) {
 			if (vpisujemoPin) {
 				if (tipkovnica.text.Length == 4) {
 					if (tipkovnica.text == "2525") {
-						// TODO ali se da PIN kodo morda nekam skriti?
-
 						// uporabnik je vnesel pravilen PIN
 						// klicemo funkcijo za nastavljanje pin-a
 						pinCorrect = true;

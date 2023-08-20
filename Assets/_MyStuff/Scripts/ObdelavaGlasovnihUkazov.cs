@@ -104,7 +104,9 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	public void PrikaziDialogZNavodili() {
 		// prikazemo NearMenu, kjer uporabnik izbira ali bo vpisal EMSO z glasovnimi ukazi ali s tipkovnico
 		voiceOrKeyboardNearMenu.SetActive(true);
+		// NearMenu nastavimo pred kamero in  ga rotiramo tako da   bo obrnjen  proti kameri
 		voiceOrKeyboardNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
+		voiceOrKeyboardNearMenu.transform.rotation = CameraCache.Main.transform.rotation;
 	}
 
 	public void VklopiVoiceCommand() {
@@ -161,18 +163,6 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 	private TouchScreenKeyboard.Status previousStatus;
 
 	void Update() {
-
-		// TODO DELETE FROM HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
-		
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			SaveNumber(Random.Range(0, 10));
-		} else if (Input.GetKeyDown(KeyCode.Alpha2)) {
-			DeleteNumber();
-		} else if (Input.GetKeyDown(KeyCode.Alpha3)) {
-			EndSpeech();
-		}
-		// TODO DELETE TO HERE (zaenkrat uporabljam samo za testiranje v Unity Editor)
-
 		if (tipkovnica != null) {
 			tipkovnicaTekst = tipkovnica.text;
 			if (tipkovnicaTekst.Length < 1) {

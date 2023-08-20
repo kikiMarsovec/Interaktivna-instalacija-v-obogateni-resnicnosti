@@ -26,6 +26,7 @@ public class ResetiranjeAplikacije : MonoBehaviour {
 			// prikazemo gumb za resetiranje aplikacije
 			resetAppNearMenu.SetActive(true);
 			resetAppNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
+			resetAppNearMenu.transform.rotation = CameraCache.Main.transform.rotation;
 			// skrijemo nanocevko
 			gameObject.transform.localScale = Vector3.zero;
 			gameObject.SetActive(false);
@@ -58,12 +59,6 @@ public class ResetiranjeAplikacije : MonoBehaviour {
 			}
 		}
 
-		// v vsaki skripti klicemo ResetirajSkripto
-
-		// TODO v AtomiUpdate se mi zdi da ne rabimo
-
-		// TODO v ObdelavaGlasovnihUkazov se mi zdi da tudi ne rabimo
-
 		// Resetiramo NastavitevTunela
 		gameObject.GetComponent<NastavitevTunela>().ResetirajSkripto();
 		
@@ -72,8 +67,5 @@ public class ResetiranjeAplikacije : MonoBehaviour {
 
 		// Naloadamo podatke
 		gameObject.GetComponent<SaveLoadAtoms>().LoadAtomData();
-
-		// uporabniku damo gumb za resetiranje aplikacije, ko ga klikne, se nanocevka  zmanjsa  in pozicionira pred njega
-
 	}
 }
