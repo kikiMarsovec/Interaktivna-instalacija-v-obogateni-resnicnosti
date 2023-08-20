@@ -59,6 +59,10 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && !trenutnoInteraktiramo && !dialogOdprt) {
+			// Ce nismo v tunelu potem ne moremo interaktirati z atomi
+			if (!GetComponent<NastavitevTunela>().smoVTunelu)
+				return;
+
 			trenutnoInteraktiramo = true;
 			casInterakcije = Time.time;
 
@@ -83,6 +87,10 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 		// Pridobimo GameObject s katerim interaktiramo in preverimo ali gre za atom
 		GameObject trenutniGameObject = eventData.Pointer.Result.CurrentPointerTarget as GameObject;
 		if (string.Equals(trenutniGameObject.tag, "Atom") && trenutnoInteraktiramo && !dialogOdprt) {
+			// Ce nismo v tunelu potem ne moremo interaktirati z atomi
+			if (!GetComponent<NastavitevTunela>().smoVTunelu)
+				return;
+
 			trenutnoInteraktiramo = false;
 			casInterakcije = Time.time - casInterakcije;
 
@@ -163,6 +171,9 @@ public class AtomiInterakcija : MonoBehaviour, IMixedRealityPointerHandler {
 
 				// izklopimo interakcijo z atomi
 				trenutnoVpisujemoEmso = true;
+
+				// izklopimo gumb Exit Tunnel
+				GetComponent<NastavitevTunela>().vpisujemoEmso = true;
 			}
 		}
 	}

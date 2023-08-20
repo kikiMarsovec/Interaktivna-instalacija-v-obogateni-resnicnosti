@@ -26,7 +26,9 @@ public class ResetiranjeAplikacije : MonoBehaviour {
 			// prikazemo gumb za resetiranje aplikacije
 			resetAppNearMenu.SetActive(true);
 			resetAppNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
-			resetAppNearMenu.transform.rotation = CameraCache.Main.transform.rotation;
+			Quaternion rotation = CameraCache.Main.transform.rotation;
+			rotation.z = 0;
+			resetAppNearMenu.transform.rotation = rotation;
 			// skrijemo nanocevko
 			gameObject.transform.localScale = Vector3.zero;
 			gameObject.SetActive(false);

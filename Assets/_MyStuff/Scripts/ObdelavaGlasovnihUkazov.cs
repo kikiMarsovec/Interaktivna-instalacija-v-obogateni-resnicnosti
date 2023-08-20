@@ -106,7 +106,9 @@ public class ObdelavaGlasovnihUkazov : MonoBehaviour {
 		voiceOrKeyboardNearMenu.SetActive(true);
 		// NearMenu nastavimo pred kamero in  ga rotiramo tako da   bo obrnjen  proti kameri
 		voiceOrKeyboardNearMenu.transform.position = CameraCache.Main.transform.position + CameraCache.Main.transform.forward * 0.5f;
-		voiceOrKeyboardNearMenu.transform.rotation = CameraCache.Main.transform.rotation;
+		Quaternion rotation = CameraCache.Main.transform.rotation;
+		rotation.z = 0;
+		voiceOrKeyboardNearMenu.transform.rotation = rotation;
 	}
 
 	public void VklopiVoiceCommand() {

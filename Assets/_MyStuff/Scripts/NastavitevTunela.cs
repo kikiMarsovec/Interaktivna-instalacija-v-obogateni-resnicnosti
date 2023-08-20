@@ -22,7 +22,7 @@ public class NastavitevTunela : MonoBehaviour {
 	private bool tunelVNastavljanju = false;
 
 	// nastavimo na true, ko uporabnik vstopi v tunel
-	private bool smoVTunelu = false;
+	public bool smoVTunelu = false;
 
     [SerializeField]
 	[Tooltip("Dodaj DialogSmall_192x96 prefab")]
@@ -34,6 +34,8 @@ public class NastavitevTunela : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject gumbBringGWireBack;
+
+	public bool vpisujemoEmso = false;
 
 	private void Start() {
 		atomiUpdate = GetComponent<AtomiUpdate>();
@@ -107,6 +109,9 @@ public class NastavitevTunela : MonoBehaviour {
 	}
 
 	public void BringNanotubeBack() {
+		if (vpisujemoEmso) {
+			return;
+		}
 		if (smoVTunelu) {
 			// izstopimo iz tunela tako, da resetiramo aplikacijo
 			GetComponent<ResetiranjeAplikacije>().ResetirajAplikacijo();
@@ -149,6 +154,7 @@ public class NastavitevTunela : MonoBehaviour {
 		GetComponent<ObjectManipulator>().enabled = true;
 		GetComponent<NearInteractionGrabbable>().enabled = true;
 		smoVTunelu = false;
+		vpisujemoEmso = false;
 		gumbBringGWireBack.GetComponent<ButtonConfigHelper>().MainLabelText = "Bring G-wire back";
 	}
 }
