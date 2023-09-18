@@ -138,7 +138,7 @@ public class NastavitevTunela : MonoBehaviour {
 			return;
 
 		dialogInformacijePrikazan = true;
-		Dialog informacijeDialog = Dialog.Open(dialogLargePrefab, DialogButtonType.Close, "Information", "TODO information text.", true);
+		Dialog informacijeDialog = Dialog.Open(dialogLargePrefab, DialogButtonType.Close, "Information", "Before you is a 3D model of a G-wire. You can manipulate the model with your hands, move it around the room, rotate it and scale it. If the model goes out of reach, you can bring it back in front of you by pressing the 'Bring G-wire back' button. When you want to walk through the tunnel, press the 'Enter the tunnel' button. Inside the tunnel, you can select atoms with your hands. If you hold an atom for less than 3 seconds, information about the selected atom will be displayed. If you hold an atom for more than three seconds, you will be able to input your universal identifier into it.", true);
 		if (informacijeDialog != null) {
 			informacijeDialog.OnClosed += InfoDialogClosed;
 		}
